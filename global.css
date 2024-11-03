@@ -2,14 +2,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@font-face {
-    font-family: 'CustomFont';  /* Define the name for your custom font */
-    src: url('./assets/fonts/HappyMonkey-Regular.ttf') format('truetype');  /* Specify the path to your .ttf file */
-    font-weight: normal;  /* Optional: specify the font weight */
-    font-style: normal;   /* Optional: specify the font style */
-}
-
-/* Now you can apply this font to any element */
-body {
-    font-family: 'CustomFont', sans-serif;  /* Fallback to sans-serif in case the custom font doesn't load */
-}
