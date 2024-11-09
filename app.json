@@ -32,6 +32,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "apiBaseUrl": "https://scholar-server-3dv6.onrender.com/api"
     }
   }
 }

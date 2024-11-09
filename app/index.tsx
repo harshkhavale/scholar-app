@@ -24,7 +24,7 @@ export default function App() {
       </Text>
      </Animated.View>
      <Animated.View entering={FadeInDown.duration(300).delay(600).springify()} className='w-full flex justify-center items-center'>
-      <Button title='Get Started' action={()=>router.push("/(tabs)")}/>
+      <Button title='Get Started' action={()=>router.push("/(auth)")}/>
      </Animated.View>
     </View>
   );
