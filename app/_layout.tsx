@@ -16,7 +16,7 @@ export default function RootLayout() {
 
   // Load custom font
   const [loaded] = useFonts({
-    Font: require('../assets/fonts/HappyMonkey-Regular.ttf'),
+    Font: require('../assets/fonts/geist.ttf'),
   });
 
   useEffect(() => {
@@ -38,6 +38,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="course-detail" />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />

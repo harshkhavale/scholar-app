@@ -64,13 +64,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 250,
+    height: 350,
     overflow: 'hidden',
   },
   content: {
     flex: 1,
     padding: 32,
     gap: 16,
+    paddingTop:HEADER_HEIGHT/ 10,
     overflow: 'hidden',
+    marginTop:-HEADER_HEIGHT/2,
+    borderTopLeftRadius:24,
+    borderTopRightRadius:24,
   },
 });

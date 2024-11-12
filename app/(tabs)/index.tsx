@@ -1,6 +1,13 @@
 import { HelloWave } from "@/components/HelloWave";
 import React, { useState } from "react";
-import { ActivityIndicator, Pressable, ScrollView, Text, View, FlatList } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  FlatList,
+} from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router } from "expo-router";
@@ -9,19 +16,11 @@ import axios from "axios";
 import Constants from "expo-constants";
 import { useQuery } from "@tanstack/react-query";
 import CourseItem from "@/components/CourseItem";
+import { Course } from "@/types/types";
 interface Topic {
   id: string;
   name: string;
   icon: string;
-}
-
-interface Course {
-  id: string;
-  title: string;
-  thumbnail: string;
-  description: string;
-  topics: Topic[];
-  price: string;
 }
 
 const topics: Topic[] = [
@@ -35,29 +34,33 @@ const topics: Topic[] = [
 ];
 const fetchCourses = async (searchTerm?: string): Promise<Course[]> => {
   try {
-    const response = await axios.get(`https://scholar-server-3dv6.onrender.com/api/courses`
-    //   , {
-    //   params: { search: searchTerm },
-    //   headers: {
-    //     Authorization: `Bearer ${Constants.extra?.token}`,
-    //   },
-    // }
-  );
-    // Transform the response data to match the Course interface
-    return response.data.map((course: any) => ({
-      id: course._id, // Map _id to id
-      title: course.title,
-      thumbnail: course.thumbnail,
-      description: course.description,
-      topics: course.topics.map((topicId: string) => {
-        return topics.find((topic) => topic.id === topicId) || {
-          id: topicId,
-          name: topicId,
-          icon: "default-icon", // Fallback icon if topic is not found
-        };
-      }),
-      price: course.price || "Free", // Set default value if price is missing
-    }));
+    const response = await axios.get(
+      `http://192.168.153.167:5000/api/courses`
+      //   , {
+      //   params: { search: searchTerm },
+      //   headers: {
+      //     Authorization: `Bearer ${Constants.extra?.token}`,
+      //   },
+      // }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    throw error;
+  }
+};
+const fetchRecommendedCourses = async (): Promise<Course[]> => {
+  try {
+    const response = await axios.get(
+      `http://192.168.153.167:5000/api/courses`
+      //   , {
+      //   params: { search: searchTerm },
+      //   headers: {
+      //     Authorization: `Bearer ${Constants.extra?.token}`,
+      //   },
+      // }
+    );
+    return response.data;
   } catch (error) {
     console.error("Error fetching courses:", error);
     throw error;
@@ -69,6 +72,16 @@ export default function HomeScreen() {
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["search-courses", selectedTopic],
     queryFn: () => fetchCourses(selectedTopic),
+    enabled: true,
+  });
+  const {
+    data: recommendedcourses,
+    error: recommendedcourseserror,
+    isLoading: recommendedcoursesloading,
+    refetch: recommendedcoursesrefetch,
+  } = useQuery({
+    queryKey: ["recommendedcourses"],
+    queryFn: () => fetchRecommendedCourses(),
     enabled: true,
   });
   const renderTopic = (item: Topic) => {
@@ -161,33 +174,80 @@ export default function HomeScreen() {
         >
           {topics.map((item) => renderTopic(item))}
         </ScrollView>
-      </ScrollView>
-     {/* #categories-courses */}
-     {
-  isLoading ? (
-    <View className="flex-1 justify-center items-center">
-      <ActivityIndicator size="large" color="#2563eb" />
-    </View>
-  ) : error ? (
-    <Text>Error: {(error as Error).message}</Text>
-  ) : data ? (
-    <FlatList
-      horizontal
-      data={data}
-      renderItem={({ item }) => (
-        <CourseItem course={item} customStyle="w-[22rem] pl-6" index={1}/>
-      )}
-      keyExtractor={(item) => item.id.toString()}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingLeft: 24 }} // Adjust padding if needed
-    />
-  ) : (
-    <View className="flex-1 justify-center items-center">
-      <Text>No results. Try searching for a different course.</Text>
-    </View>
-  )
-}
 
+        {/* #categories-courses */}
+        {isLoading ? (
+          <View className="flex-1 justify-center items-center">
+            <ActivityIndicator size="large" color="#FF8C00" />
+          </View>
+        ) : error ? (
+          <Text>Error: {(error as Error).message}</Text>
+        ) : data ? (
+          <FlatList
+            horizontal
+            data={data}
+            renderItem={({ item }) => (
+              <CourseItem
+                course={item}
+                customStyle="w-[22rem] pl-6"
+                index={1}
+              />
+            )}
+            keyExtractor={(item) => item._id}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingLeft: 24 }} // Adjust padding if needed
+          />
+        ) : (
+          <View className="flex-1 justify-center items-center">
+            <Text style={{ fontFamily: "Font" }}>
+              No results. Try searching for a different course.
+            </Text>
+          </View>
+        )}
+        {/* recommended-courses */}
+        <View className="pt-6">
+          <View className="flex-row justify-between px-6 py-4 items-center">
+            <Text
+              className="text-base font-semibold"
+              style={{ fontFamily: "Font" }}
+            >
+              Recommended Courses
+            </Text>
+            <Text className="text-orange-700" style={{ fontFamily: "Font" }}>
+              See more
+            </Text>
+          </View>
+
+          {recommendedcoursesloading ? (
+            <View className="flex-1 justify-center items-center pt-8">
+              <ActivityIndicator size="large" color="#FF8C00" />
+            </View>
+          ) : recommendedcourseserror ? (
+            <Text>Error: {(error as Error).message}</Text>
+          ) : recommendedcourses ? (
+            <FlatList
+              horizontal
+              data={recommendedcourses}
+              renderItem={({ item }) => (
+                <CourseItem
+                  course={item}
+                  customStyle="w-[22rem] pl-6"
+                  index={1}
+                />
+              )}
+              keyExtractor={(item) => item._id}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingLeft: 24 }} // Adjust padding if needed
+            />
+          ) : (
+            <View className="flex-1 justify-center items-center">
+              <Text style={{ fontFamily: "Font" }}>
+                No results. Try searching for a different course.
+              </Text>
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 }
