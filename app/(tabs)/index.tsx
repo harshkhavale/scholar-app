@@ -35,7 +35,7 @@ const topics: Topic[] = [
 const fetchCourses = async (searchTerm?: string): Promise<Course[]> => {
   try {
     const response = await axios.get(
-      `http://192.168.153.167:5000/api/courses`
+      `http://192.168.0.104:5000/api/courses`
       //   , {
       //   params: { search: searchTerm },
       //   headers: {
@@ -52,7 +52,7 @@ const fetchCourses = async (searchTerm?: string): Promise<Course[]> => {
 const fetchRecommendedCourses = async (): Promise<Course[]> => {
   try {
     const response = await axios.get(
-      `http://192.168.153.167:5000/api/courses`
+      `http://192.168.0.104:5000/api/courses`
       //   , {
       //   params: { search: searchTerm },
       //   headers: {

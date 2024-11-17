@@ -35,7 +35,7 @@ const CourseItem: React.FC<CourseItemProps> = ({
       >
         <Image
           source={{
-            uri: `http://192.168.153.167:5000/uploads/thumbnails/${course.thumbnail}`,
+            uri: `http://192.168.0.104:5000/uploads/thumbnails/${course.thumbnail}`,
           }}
           className="w-full h-40"
         />
