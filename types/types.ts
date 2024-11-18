@@ -60,6 +60,12 @@ export interface Educator {
   createdAt?: Date; // Timestamp for document creation, added by Mongoose
   updatedAt?: Date; // Timestamp for document updates, added by Mongoose
 }
-export interface Modules{
-  total:number,modules:Module[]
+export interface Modules {
+  total: number;
+  modules: Module[];
+}
+export interface Auth {
+  token: string;
+  user: User;
+  message?: string | null;
 }

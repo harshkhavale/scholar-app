@@ -17,6 +17,8 @@ import Constants from "expo-constants";
 import { useQuery } from "@tanstack/react-query";
 import CourseItem from "@/components/CourseItem";
 import { Course } from "@/types/types";
+import { useAuthStore } from "@/store/auth-store";
+
 interface Topic {
   id: string;
   name: string;
@@ -68,6 +70,8 @@ const fetchRecommendedCourses = async (): Promise<Course[]> => {
 };
 
 export default function HomeScreen() {
+  const user = useAuthStore((state) => state.user);
+
   const [selectedTopic, setSelectedTopic] = useState("business");
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["search-courses", selectedTopic],
@@ -132,7 +136,7 @@ export default function HomeScreen() {
               className="text-white text-2xl"
               style={{ fontFamily: "Font" }}
             >
-              Jayraj Jadhav
+             {user?.fullName}
             </Text>
           </View>
           <View>
