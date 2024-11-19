@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Feather from '@expo/vector-icons/Feather';
+
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import axios from "axios";
@@ -114,11 +116,18 @@ export default function HomeScreen() {
       </Pressable>
     );
   };
-
+  const getTimeBasedGreeting = () => {
+    const currentHour = new Date().getHours();
+  
+    if (currentHour < 12) return "Good Morning";
+    if (currentHour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+  const [greeting, setGreeting] = useState(getTimeBasedGreeting());
   return (
     <View className="flex-1 bg-white">
       {/* #topbar-orange */}
-      <View className="pt-16 pb-6 px-6 bg-orange-700 text-white">
+      <View className="pt-8 pb-6 px-6 bg-orange-700 text-white">
         <Animated.View className="flex-row justify-between items-center">
           <View>
             <View className="flex-row items-end gap-2">
@@ -126,8 +135,8 @@ export default function HomeScreen() {
                 style={{ fontFamily: "Font" }}
                 className="text-white text-lg"
               >
-                Good Morning
-              </Text>
+                {greeting}
+                </Text>
               <View>
                 <HelloWave />
               </View>
@@ -140,11 +149,8 @@ export default function HomeScreen() {
             </Text>
           </View>
           <View>
-            <MaterialCommunityIcons
-              name="bell-badge-outline"
-              size={30}
-              color="white"
-            />
+          <MaterialCommunityIcons name="bell-badge-outline" size={30} color="white" />
+
           </View>
         </Animated.View>
         <Pressable onPress={() => router.push("/explore")}>

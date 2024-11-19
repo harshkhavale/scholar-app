@@ -112,7 +112,31 @@ const Login = () => {
             </Pressable>
           </View>
         </View>
-        <View className="flex-row gap-2 justify-center">
+       
+        <Text
+          style={{ fontFamily: "Font" }}
+          className="flex-row  justify-center items-center py-4"
+        >
+          <Text style={{ fontFamily: "Font" }} className="text-center">
+            Already have an account?{" "}
+          </Text>
+          <Pressable
+            onPress={() => router.push("/(auth)/register")}
+            className="text-center"
+          >
+            <Text style={{ fontFamily: "Font" }} className="text-orange-700 ">
+              Register{" "}
+            </Text>
+          </Pressable>
+        </Text>
+      </Animated.View>
+      <Animated.View
+        entering={FadeInDown.duration(300).delay(600).springify()}
+        className="w-full flex justify-center items-center"
+      >
+        <Button title="Login" action={handleLogin} />
+      </Animated.View>
+      <View className="flex-row gap-2 mt-8 justify-center">
           <Pressable
             onPress={() => router.push("/")}
             className="flex-row items-center justify-center gap-2 border-2 px-4"
@@ -138,29 +162,6 @@ const Login = () => {
             </Text>
           </Pressable>
         </View>
-        <Text
-          style={{ fontFamily: "Font" }}
-          className="flex-row  justify-center items-center py-4"
-        >
-          <Text style={{ fontFamily: "Font" }} className="text-center">
-            Already have an account?{" "}
-          </Text>
-          <Pressable
-            onPress={() => router.push("/(auth)/register")}
-            className="text-center"
-          >
-            <Text style={{ fontFamily: "Font" }} className="text-orange-700 ">
-              Register{" "}
-            </Text>
-          </Pressable>
-        </Text>
-      </Animated.View>
-      <Animated.View
-        entering={FadeInDown.duration(300).delay(600).springify()}
-        className="w-full flex justify-center items-center"
-      >
-        <Button title="Login" action={handleLogin} />
-      </Animated.View>
       <Toast />
     </View>
   );

@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Course, Modules } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import ModuleList from "@/components/ModuleList";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import Button from "@/components/Button";
 const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
   try {
     const response = await axios.get<Course>(
@@ -125,7 +127,7 @@ const CourseDetail = () => {
       }
     >
       <View className="">
-        <View className="bg-orange-700 rounded-xl p-0.5 mb-4 w-32 justify-center items-center">
+        <View className="bg-orange-500 rounded-xl p-0.5 mb-4 w-32 justify-center items-center">
           <Text style={{ fontFamily: "Font" }} className="text-base text-white">
             {data?.languages?.at(0)}
           </Text>
@@ -143,9 +145,7 @@ const CourseDetail = () => {
         {
           selectedSegment === "module" ? (
             <View className="mt-6">
-              <Text style={{ fontFamily: "Font" }} className="font-bold text-2xl pb-4">
-                Modules
-              </Text>
+             
               <ModuleList onLoadMore={modulesRefetch} modulesData={modulesData} isLoading={modulesIsLoading} />
             </View>
           ):(
@@ -162,6 +162,12 @@ const CourseDetail = () => {
           )
         }
       </View>
+      <Animated.View
+        entering={FadeInDown.duration(300).delay(600).springify()}
+        className="w-full flex justify-center items-center"
+      >
+        <Button title="Enroll" action={()=>(console.log("ENROLL"))} />
+      </Animated.View>
     </ParallaxScrollView>
   );
 };

@@ -174,7 +174,28 @@ const Register = () => {
           </View>
         </View>
 
-        <View className="flex-row gap-2 justify-center">
+        
+
+        <Text
+          style={{ fontFamily: "Font" }}
+          className="text-center leading-[3.5rem] flex justify-center items-center"
+        >
+          Already have an account?{" "}
+          <Pressable onPress={() => router.push("/(auth)/login")}>
+            <Text style={{ fontFamily: "Font" }} className="text-orange-700">
+              Login
+            </Text>
+          </Pressable>
+        </Text>
+      </Animated.View>
+
+      <Animated.View
+        entering={FadeInDown.duration(300).delay(600).springify()}
+        className="w-full flex justify-center items-center"
+      >
+        <Button title="Register" action={handleRegister} />
+      </Animated.View>
+      <View className="flex-row gap-2 justify-center mt-8">
           <Pressable
             onPress={() => router.push("/")}
             className="flex-row items-center justify-center gap-2 border-2 px-4"
@@ -200,27 +221,6 @@ const Register = () => {
             </Text>
           </Pressable>
         </View>
-
-        <Text
-          style={{ fontFamily: "Font" }}
-          className="text-center leading-[3.5rem] flex justify-center items-center"
-        >
-          Already have an account?{" "}
-          <Pressable onPress={() => router.push("/(auth)/login")}>
-            <Text style={{ fontFamily: "Font" }} className="text-orange-700">
-              Login
-            </Text>
-          </Pressable>
-        </Text>
-      </Animated.View>
-
-      <Animated.View
-        entering={FadeInDown.duration(300).delay(600).springify()}
-        className="w-full flex justify-center items-center"
-      >
-        <Button title="Register" action={handleRegister} />
-      </Animated.View>
-
       <Toast />
     </View>
   );

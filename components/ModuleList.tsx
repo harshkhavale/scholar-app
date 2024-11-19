@@ -18,8 +18,8 @@ const ModuleList: React.FC<ModuleListProps> = ({
         <Text style={{ fontFamily: "Font" }}>No modules yet...</Text>
       ) : (
         <View>
-          <Text style={{ fontFamily: "Font" }}>
-            Course Modules: {modulesData?.total}
+          <Text style={{ fontFamily: "Font" }} className=" font-bold text-2xl">
+            Modules : {modulesData?.total}
           </Text>
           <View>
             {modulesData?.modules.map((module, index) => (
