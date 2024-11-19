@@ -8,6 +8,7 @@ import "../global.css";
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { StyleSheet } from 'react-native';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import Toast from 'react-native-toast-message';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toast />
     <ThemeProvider value={colorScheme === 'light' ? DefaultTheme : DarkTheme}>
       <Stack
         screenOptions={{

@@ -7,6 +7,7 @@ import { schoolgirl, teacher } from "@/assets";
 export interface RoleCard {
   id: string; // Unique identifier for the role
   name: string; // Display name of the role
+  value:string,
   description: string; // Description of the role
   image: Object; // Path or URL of the image
   path: any; // Navigation path
@@ -16,13 +17,15 @@ export const roles: RoleCard[] = [
   {
     id: "educator",
     name: "Educator",
+    value: "educator",
     description: "Teach courses, create content, and engage with students.",
     image: teacher,
     path: "/(auth)", // Ensure this matches a valid file in your app's structure
   },
   {
     id: "learner",
-    name: "Learner",
+    name: "Student",
+    value:"student",
     description: "Take courses, interact with instructors, and enhance your skills.",
     image: schoolgirl,
     path: "/(auth)/register", // Ensure this matches a valid file in your app's structure
@@ -58,7 +61,7 @@ const RoleSelectionScreen = () => {
             {role.description}
           </Text>
           <Pressable
-            onPress={() => router.push(role.path)}
+            onPress={() => router.push({pathname:role.path,params:{userType:role.value}})}
             className="mt-4 bg-orange-700 py-3 rounded-2xl"
           >
             <Text style={{ fontFamily: "Font" }} className="text-center text-white font-semibold text-lg">

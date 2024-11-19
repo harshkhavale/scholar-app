@@ -1,56 +1,88 @@
-// components/Login.tsx
-import { View, Text, TextInput, Pressable, Alert } from "react-native";
 import React, { useState } from "react";
+import { View, Text, TextInput, Pressable } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { router } from "expo-router";
-import { useAuthStore } from "@/store/auth-store"; // Import Zustand store
-import Constants from 'expo-constants';
+import { useAuthStore } from "@/store/auth-store";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import Button from "@/components/Button";
 import axios from "axios";
+import Toast from "react-native-toast-message";
 import { AUTH, BASE_URL } from "@/utils/endpoints";
 import { Auth } from "@/types/types";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const setUser = useAuthStore((state) => state.setUser);
   const setToken = useAuthStore((state) => state.setToken);
 
   const handleLogin = async () => {
     try {
-      // Type the Axios response to ensure it matches `Auth`
-      const response = await axios.post<Auth>("http://192.168.0.104:5000/api/auth/login", {
-        email,
-        password,
-      });
+      const formatedemail = email.toLowerCase();
+      const response = await axios.post<Auth>(
+        "http://192.168.0.104:5000/api/auth/login",
+        {
+          email: formatedemail,
+          password,
+        }
+      );
   
-      const data = response.data; // `data` is now strongly typed as `Auth`
+      const data = response.data;
   
       if (response.status === 200) {
-        // On successful login, store token and user info in Zustand store
-        setUser(data.user); // `data.user` is guaranteed to match the `User` structure
-        setToken(data.token); // `data.token` is guaranteed to be a string
+        setUser(data.user);
+        setToken(data.token);
   
-        // Redirect to /home on success
-        router.push("/(tabs)");
+        // Show success toast and delay navigation
+        Toast.show({
+          type: "success",
+          text1: "Login Successful",
+          text2: "Welcome back!",
+        });
+  
+        setTimeout(() => {
+          router.push("/(tabs)");
+        }, 2000); // 2-second delay for the toast
       } else {
-        Alert.alert("Login Failed", data.message || "Something went wrong");
+        Toast.show({
+          type: "error",
+          text1: "Login Failed",
+          text2: data.message || "Something went wrong",
+        });
       }
     } catch (error: any) {
       console.error(error);
-      Alert.alert("Error", error.response?.data?.message || "Network error. Please try again.");
+  
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2:
+          error.response?.data?.message || "Network error. Please try again.",
+      });
     }
   };
+  
 
   return (
     <View className="gap-4 flex-1 w-full justify-center items-center">
-      <Animated.View entering={FadeInDown.duration(300).delay(200).springify()} className="w-full">
-        <Text style={{ fontFamily: "Font" }} className="text-5xl text-orange-700 ps-4 leading-[3.5rem]">
+      <Animated.View
+        entering={FadeInDown.duration(300).delay(200).springify()}
+        className="w-full"
+      >
+        <Text
+          style={{ fontFamily: "Font" }}
+          className="text-5xl text-orange-700 ps-4 leading-[3.5rem]"
+        >
           Welcome, Resume your learnings!: Login
         </Text>
       </Animated.View>
 
-      <Animated.View entering={FadeInDown.duration(300).delay(400).springify()} className="w-full p-4">
+      <Animated.View
+        entering={FadeInDown.duration(300).delay(400).springify()}
+        className="w-full p-4"
+      >
         <View className="flex-col gap-4 items-center rounded-2xl p-4 mt-4">
           <TextInput
             value={email}
@@ -59,38 +91,66 @@ const Login = () => {
             placeholder="johndoe@gmail.com"
             className="border-2 w-full rounded-2xl p-4"
           />
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={{ fontFamily: "Font" }}
-            placeholder="Password@123"
-            className="border-2 w-full rounded-2xl p-4"
-          />
+          <View className="relative w-full">
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!passwordVisible}
+              style={{ fontFamily: "Font" }}
+              placeholder="Password@123"
+              className="border-2 w-full rounded-2xl p-4"
+            />
+            <Pressable
+              onPress={() => setPasswordVisible(!passwordVisible)}
+              className="absolute right-4 top-4"
+            >
+              <Ionicons
+                name={passwordVisible ? "eye" : "eye-off"}
+                size={24}
+                color="gray"
+              />
+            </Pressable>
+          </View>
         </View>
         <View className="flex-row gap-2 justify-center">
-            <Pressable onPress={() => router.push("/")} className="flex-row items-center justify-center gap-2 border-2 px-4">
+          <Pressable
+            onPress={() => router.push("/")}
+            className="flex-row items-center justify-center gap-2 border-2 px-4"
+          >
             <AntDesign name="google" size={30} color="gray" />
-              <Text style={{ fontFamily: "Font" }} className="text-center leading-[3.5rem]">
-
-                Google
-              </Text>
-            </Pressable>
-            <Pressable onPress={() => router.push("/")} className="flex-row items-center justify-center gap-2 border-2 px-4">
+            <Text
+              style={{ fontFamily: "Font" }}
+              className="text-center leading-[3.5rem]"
+            >
+              Google
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => router.push("/")}
+            className="flex-row items-center justify-center gap-2 border-2 px-4"
+          >
             <AntDesign name="github" size={30} color="gray" />
-             <Text style={{ fontFamily: "Font" }} className="text-center leading-[3.5rem]">
-                GitHub
-              </Text>
-            </Pressable>
+            <Text
+              style={{ fontFamily: "Font" }}
+              className="text-center leading-[3.5rem]"
+            >
+              GitHub
+            </Text>
+          </Pressable>
         </View>
         <Text
           style={{ fontFamily: "Font" }}
-          className="text-center leading-[3.5rem] flex justify-center items-center"
+          className="flex-row  justify-center items-center py-4"
         >
-          Already have ab account?
-          <Pressable onPress={() => router.push("/(auth)/login")}>
-            <Text style={{ fontFamily: "Font" }} className="text-orange-700">
-              Login
+          <Text style={{ fontFamily: "Font" }} className="text-center">
+            Already have an account?{" "}
+          </Text>
+          <Pressable
+            onPress={() => router.push("/(auth)/register")}
+            className="text-center"
+          >
+            <Text style={{ fontFamily: "Font" }} className="text-orange-700 ">
+              Register{" "}
             </Text>
           </Pressable>
         </Text>
@@ -101,6 +161,7 @@ const Login = () => {
       >
         <Button title="Login" action={handleLogin} />
       </Animated.View>
+      <Toast />
     </View>
   );
 };
