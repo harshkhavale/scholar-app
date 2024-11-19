@@ -53,7 +53,7 @@ const RoleSelectionScreen = () => {
         >
           <View className="flex-row items-center mb-4">
           <Image source={role.image} className=' h-40 w-40 object-contain'/>
-          <Text style={{ fontFamily: "Font" }} className="ml-10 text-3xl text-center text-orange-700">
+          <Text style={{ fontFamily: "Font" }} className="ml-10 text-3xl text-center text-orange-500">
               {role.name}
             </Text>
           </View>
@@ -62,7 +62,7 @@ const RoleSelectionScreen = () => {
           </Text>
           <Pressable
             onPress={() => router.push({pathname:role.path,params:{userType:role.value}})}
-            className="mt-4 bg-orange-700 py-3 rounded-2xl"
+            className="mt-4 bg-orange-500 py-3 rounded-2xl"
           >
             <Text style={{ fontFamily: "Font" }} className="text-center text-white font-semibold text-lg">
               Choose {role.name}

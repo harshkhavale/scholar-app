@@ -7,6 +7,7 @@ import {
   Text,
   View,
   FlatList,
+  Image,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -20,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import CourseItem from "@/components/CourseItem";
 import { Course } from "@/types/types";
 import { useAuthStore } from "@/store/auth-store";
+import { add } from "@/assets";
 
 interface Topic {
   id: string;
@@ -102,7 +104,7 @@ export default function HomeScreen() {
         <View
           className={`p-4 rounded-full flex-row items-center ${
             selectedTopic === item.id
-              ? "border-2 border-orange-700"
+              ? "border-2 border-orange-500"
               : "border border-gray-400"
           }`}
         >
@@ -127,7 +129,7 @@ export default function HomeScreen() {
   return (
     <View className="flex-1 bg-white">
       {/* #topbar-orange */}
-      <View className="pt-8 pb-6 px-6 bg-orange-700 text-white">
+      <View className="pt-8 pb-6 px-6 bg-orange-500 text-white">
         <Animated.View className="flex-row justify-between items-center">
           <View>
             <View className="flex-row items-end gap-2">
@@ -162,17 +164,22 @@ export default function HomeScreen() {
           </View>
         </Pressable>
       </View>
+     
       {/* #topic-scroll */}
       <ScrollView className="flex-1 bg-white gap-4">
+      <Image
+          source={add}
+          className=" h-60 w-full"
+        />
         <Animated.View
           className="gap-6"
           entering={FadeInDown.duration(500).delay(200).springify()}
         >
           <View className="flex-row justify-between px-6 py-4 items-center">
-            <Text className="text-base" style={{ fontFamily: "Font" }}>
+            <Text className="text-2xl" style={{ fontFamily: "Font" }}>
               Explore Topics
             </Text>
-            <Text className="text-orange-700" style={{ fontFamily: "Font" }}>
+            <Text className="text-orange-500" style={{ fontFamily: "Font" }}>
               See more
             </Text>
           </View>
@@ -214,49 +221,7 @@ export default function HomeScreen() {
             </Text>
           </View>
         )}
-        {/* recommended-courses */}
-        <View className="pt-6">
-          <View className="flex-row justify-between px-6 py-4 items-center">
-            <Text
-              className="text-base font-semibold"
-              style={{ fontFamily: "Font" }}
-            >
-              Recommended Courses
-            </Text>
-            <Text className="text-orange-700" style={{ fontFamily: "Font" }}>
-              See more
-            </Text>
-          </View>
-
-          {recommendedcoursesloading ? (
-            <View className="flex-1 justify-center items-center pt-8">
-              <ActivityIndicator size="large" color="#FF8C00" />
-            </View>
-          ) : recommendedcourseserror ? (
-            <Text>Error: {(error as Error).message}</Text>
-          ) : recommendedcourses ? (
-            <FlatList
-              horizontal
-              data={recommendedcourses}
-              renderItem={({ item }) => (
-                <CourseItem
-                  course={item}
-                  customStyle="w-[22rem] pl-6"
-                  index={1}
-                />
-              )}
-              keyExtractor={(item) => item._id}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingLeft: 24 }} // Adjust padding if needed
-            />
-          ) : (
-            <View className="flex-1 justify-center items-center">
-              <Text style={{ fontFamily: "Font" }}>
-                No results. Try searching for a different course.
-              </Text>
-            </View>
-          )}
-        </View>
+       
       </ScrollView>
     </View>
   );

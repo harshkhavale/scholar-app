@@ -69,7 +69,7 @@ const SegmentedControl: React.FC<{
       <Pressable
         onPress={() => onSegmentChange("module")}
         className={`flex-1 py-3 rounded-md ${
-          selectedSegment === "module" ? "bg-orange-700" : "bg-transparent"
+          selectedSegment === "module" ? "bg-orange-500" : "bg-transparent"
         }`}
       >
         <Text
@@ -85,7 +85,7 @@ const SegmentedControl: React.FC<{
       <Pressable
         onPress={() => onSegmentChange("reviews")}
         className={`flex-1 py-3 rounded-md ${
-          selectedSegment === "reviews" ? "bg-orange-700" : "bg-transparent"
+          selectedSegment === "reviews" ? "bg-orange-500" : "bg-transparent"
         }`}
       >
         <Text

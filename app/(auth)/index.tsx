@@ -32,7 +32,7 @@ const PricingScreen = () => {
           entering={FadeInLeft.duration(300).delay(400 + index * 200).springify()}
           className="w-11/12 mb-6 p-6 rounded-2xl bg-white border border-gray-300 shadow-md"
         >
-          <Text style={{ fontFamily: "Font" }} className="text-2xl text-orange-700 mb-2">
+          <Text style={{ fontFamily: "Font" }} className="text-2xl text-orange-500 mb-2">
             {plan.name}
           </Text>
           <Text style={{ fontFamily: "Font" }} className="text-4xl mb-4">
@@ -48,7 +48,7 @@ const PricingScreen = () => {
           ))}
           <Pressable
             onPress={() => router.push("/(auth)/register")}
-            className="mt-4 bg-orange-700 py-3 rounded-2xl"
+            className="mt-4 bg-orange-500 py-3 rounded-2xl"
           >
             <Text
               style={{ fontFamily: "Font" }}

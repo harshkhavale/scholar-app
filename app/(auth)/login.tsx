@@ -73,7 +73,7 @@ const Login = () => {
       >
         <Text
           style={{ fontFamily: "Font" }}
-          className="text-5xl text-orange-700 ps-4 leading-[3.5rem]"
+          className="text-5xl text-orange-500 ps-4 leading-[3.5rem]"
         >
           Welcome, Resume your learnings!: Login
         </Text>
@@ -89,7 +89,7 @@ const Login = () => {
             onChangeText={setEmail}
             style={{ fontFamily: "Font" }}
             placeholder="johndoe@gmail.com"
-            className="border-2 w-full rounded-2xl p-4"
+            className="border-2 w-full border-gray-400 rounded-2xl text-xl p-4"
           />
           <View className="relative w-full">
             <TextInput
@@ -98,7 +98,7 @@ const Login = () => {
               secureTextEntry={!passwordVisible}
               style={{ fontFamily: "Font" }}
               placeholder="Password@123"
-              className="border-2 w-full rounded-2xl p-4"
+              className="border-2 border-gray-400 w-full rounded-2xl text-xl p-4"
             />
             <Pressable
               onPress={() => setPasswordVisible(!passwordVisible)}
@@ -124,7 +124,7 @@ const Login = () => {
             onPress={() => router.push("/(auth)/register")}
             className="text-center"
           >
-            <Text style={{ fontFamily: "Font" }} className="text-orange-700 ">
+            <Text style={{ fontFamily: "Font" }} className="text-orange-500 ">
               Register{" "}
             </Text>
           </Pressable>
@@ -139,7 +139,7 @@ const Login = () => {
       <View className="flex-row gap-2 mt-8 justify-center">
           <Pressable
             onPress={() => router.push("/")}
-            className="flex-row items-center justify-center gap-2 border-2 px-4"
+            className="flex-row items-center justify-center gap-2 border-2 px-4 border-gray-400"
           >
             <AntDesign name="google" size={30} color="gray" />
             <Text
@@ -151,7 +151,7 @@ const Login = () => {
           </Pressable>
           <Pressable
             onPress={() => router.push("/")}
-            className="flex-row items-center justify-center gap-2 border-2 px-4"
+            className="flex-row items-center justify-center gap-2 border-2 px-4 border-gray-400"
           >
             <AntDesign name="github" size={30} color="gray" />
             <Text

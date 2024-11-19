@@ -127,7 +127,7 @@ const Register = () => {
       >
         <Text
           style={{ fontFamily: "Font" }}
-          className="text-5xl text-orange-700 ps-4 leading-[3.5rem]"
+          className="text-5xl text-orange-500 ps-4 leading-[3.5rem]"
         >
           Get started for your career growth: Register
         </Text>
@@ -143,14 +143,14 @@ const Register = () => {
             onChangeText={setFullName}
             style={{ fontFamily: "Font" }}
             placeholder="Full Name"
-            className="border-2 w-full rounded-2xl p-4"
+            className="border-2 w-full rounded-2xl p-4 text-xl border-gray-400"
           />
           <TextInput
             value={email}
             onChangeText={setEmail}
             style={{ fontFamily: "Font" }}
             placeholder="johndoe@gmail.com"
-            className="border-2 w-full rounded-2xl p-4"
+            className="border-2 w-full rounded-2xl p-4 text-xl border-gray-400"
           />
           <View className="relative w-full">
             <TextInput
@@ -159,7 +159,7 @@ const Register = () => {
               secureTextEntry={!showPassword}
               style={{ fontFamily: "Font" }}
               placeholder="Password@123"
-              className="border-2 w-full rounded-2xl p-4"
+              className="border-2 w-full rounded-2xl p-4 text-xl border-gray-400"
             />
             <Pressable
               onPress={() => setShowPassword(!showPassword)}
@@ -182,7 +182,7 @@ const Register = () => {
         >
           Already have an account?{" "}
           <Pressable onPress={() => router.push("/(auth)/login")}>
-            <Text style={{ fontFamily: "Font" }} className="text-orange-700">
+            <Text style={{ fontFamily: "Font" }} className="text-orange-500">
               Login
             </Text>
           </Pressable>
@@ -198,7 +198,7 @@ const Register = () => {
       <View className="flex-row gap-2 justify-center mt-8">
           <Pressable
             onPress={() => router.push("/")}
-            className="flex-row items-center justify-center gap-2 border-2 px-4"
+            className="flex-row items-center justify-center gap-2 border-2 px-4 border-gray-400"
           >
             <AntDesign name="google" size={30} color="gray" />
             <Text
@@ -210,7 +210,7 @@ const Register = () => {
           </Pressable>
           <Pressable
             onPress={() => router.push("/")}
-            className="flex-row items-center justify-center gap-2 border-2 px-4"
+            className="flex-row items-center justify-center gap-2 border-2 px-4 border-gray-400"
           >
             <AntDesign name="github" size={30} color="gray" />
             <Text

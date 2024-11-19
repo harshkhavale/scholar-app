@@ -11,7 +11,7 @@ const Button: React.FC<ButtonProps> = ({ title, action }: ButtonProps) => {
   return (
     <View className="w-full flex justify-center items-center">
       <Pressable
-        className="bg-orange-700 rounded-3xl justify-center items-center py-5 w-3/4"
+        className="bg-orange-500 rounded-3xl justify-center items-center py-5 w-3/4"
         onPress={action}
       >
         <Text
