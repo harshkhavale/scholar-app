@@ -7,12 +7,17 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import axios from "axios";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Course } from "@/types/types";
+import { useAuthStore } from "@/store/auth-store";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { router } from "expo-router";
 
 export default function CoursesScreen() {
+  const { user } = useAuthStore();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,7 +27,9 @@ export default function CoursesScreen() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://192.168.0.104:5000/api/courses");
+        const response = await axios.get(
+          "http://192.168.0.104:5000/api/courses"
+        );
         setCourses(response.data);
         setFilteredCourses(response.data);
       } catch (error) {
@@ -46,7 +53,7 @@ export default function CoursesScreen() {
   const renderCourseItem = ({ item }: { item: Course }) => (
     <TouchableOpacity
       className="flex-1 m-2 bg-white rounded-xl shadow-md"
-      onPress={() => console.log("Course clicked:", item.title)}
+      onPress={() => router.push({pathname:"/course-detail",params:{courseId:item._id}})}
     >
       {/* Course Image */}
       <Image
@@ -79,9 +86,18 @@ export default function CoursesScreen() {
   );
 
   return (
-    <View className="flex-1 bg-gray-100">
+    <View className="flex-1 bg-gray-100 mt-6">
       {/* Search Bar */}
-      <View className="flex-row items-center bg-white p-3 rounded-2xl mx-4 my-4 shadow-md">
+      <View className="w-full px-4 pb-8">
+  {user?.userType === "educator" ? (
+    <View className="flex-row items-center gap-2">
+      {/* Add Folder Button */}
+      <Pressable onPress={()=>router.push("/create-course")} className="bg-orange-500 p-3 rounded-2xl shadow-lg">
+        <AntDesign name="addfolder" size={24} color="#FFFFFF" />
+      </Pressable>
+
+      {/* Search Bar */}
+      <View className="flex-1 flex-row items-center bg-white p-3 rounded-2xl shadow-md">
         <Ionicons name="search" size={20} color="#777" />
         <TextInput
           className="flex-1 ml-2 text-base"
@@ -90,6 +106,21 @@ export default function CoursesScreen() {
           value={searchTerm}
         />
       </View>
+    </View>
+  ) : (
+    <View className="flex-row items-center bg-white p-3 rounded-2xl shadow-md">
+      {/* Search Bar */}
+      <Ionicons name="search" size={20} color="#777" />
+      <TextInput
+        className="flex-1 ml-2 text-base"
+        placeholder="Search courses..."
+        onChangeText={setSearchTerm}
+        value={searchTerm}
+      />
+    </View>
+  )}
+</View>
+
 
       {/* Courses Grid */}
       {loading ? (

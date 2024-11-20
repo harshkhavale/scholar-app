@@ -8,6 +8,7 @@ import {
   View,
   FlatList,
   Image,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -75,7 +76,9 @@ const fetchRecommendedCourses = async (): Promise<Course[]> => {
 
 export default function HomeScreen() {
   const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.clearAuth); // Add your logout function here
 
+  const [showDropdown, setShowDropdown] = useState(false); // For the dropdown menu
   const [selectedTopic, setSelectedTopic] = useState("business");
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["search-courses", selectedTopic],
@@ -151,7 +154,36 @@ export default function HomeScreen() {
             </Text>
           </View>
           <View>
-          <MaterialCommunityIcons name="bell-badge-outline" size={30} color="white" />
+          <View>
+  {/* Dropdown Trigger */}
+  <Pressable onPress={() => setShowDropdown(!showDropdown)}>
+    <Ionicons 
+      name="menu-sharp"
+      size={30}
+      color="white"
+    />
+  </Pressable>
+
+  {/* Dropdown Menu */}
+  {showDropdown && (
+    <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
+      <View className="absolute w-40 right-0 mt-2 bg-white rounded-md shadow-lg z-10">
+        <Pressable
+          onPress={() => {
+            setShowDropdown(false);
+            logout(); // Call your logout function
+            router.push("/(auth)/login"); // Redirect to login screen
+          }}
+          className="p-4"
+        >
+          <Text className="text-gray-700" style={{ fontFamily: "Font" }}>
+            Logout
+          </Text>
+        </Pressable>
+      </View>
+    </TouchableWithoutFeedback>
+  )}
+</View>
 
           </View>
         </Animated.View>

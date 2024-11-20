@@ -1,17 +1,19 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import React from "react";
 import Animated, { FadeInDown, FadeInLeft, FadeInRight } from "react-native-reanimated";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import Button from "@/components/Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const plans = [
-  { id: "basic", name: "Basic Plan", price: "₹199", benefits: ["1 Project", "Basic Support", "Access to Tutorials"] },
-  { id: "standard", name: "Standard Plan", price: "₹499", benefits: ["5 Projects", "Priority Support", "Access to All Tutorials"] },
-  { id: "premium", name: "Premium Plan", price: "₹999", benefits: ["Unlimited Projects", "24/7 Support", "Exclusive Content Access"] },
+  { id: "free", name: "Basic Plan", price: "Free", benefits: ["1 Project", "Basic Support", "Access to Tutorials"] },
+  { id: "premium", name: "Premium Plan", price: "₹499", benefits: ["5 Projects", "Priority Support", "Access to All Tutorials"] },
+  { id: "enterprise", name: "Enterprise Plan", price: "₹999", benefits: ["Unlimited Projects", "24/7 Support", "Exclusive Content Access"] },
 ];
 
 const PricingScreen = () => {
+  const { userType } = useLocalSearchParams();
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', paddingVertical: 20 }}>
       <Animated.View
@@ -47,7 +49,7 @@ const PricingScreen = () => {
             </View>
           ))}
           <Pressable
-            onPress={() => router.push("/(auth)/register")}
+            onPress={() => router.push({pathname:"/(auth)/register", params:{userType:userType,plan:plan.id}})}
             className="mt-4 bg-orange-500 py-3 rounded-2xl"
           >
             <Text
