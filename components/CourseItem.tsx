@@ -42,8 +42,11 @@ const CourseItem: React.FC<CourseItemProps> = ({
         />
 
         <View className="px-4 p-2">
-          <Text className=" text-lg min-h-16 font-semibold" style={{ fontFamily: "Font" }}>
+          <Text className=" text-lg font-semibold" style={{ fontFamily: "Font" }}>
             {course.title}
+          </Text>
+          <Text className=" text-sm text-gray-500" style={{ fontFamily: "Font" }}>
+            {course.description}
           </Text>
           <View className="flex-row items-center pt-2 pb-4 justify-between">
             <Text style={{ fontFamily: "Font" }}>

@@ -8,21 +8,15 @@ interface ModuleCardProps {
 }
 
 const ModuleCard: React.FC<ModuleCardProps> = ({ module }) => {
-  const handleFileOpen = (filePath: string) => {
-    const fileUrl = `https://your-api-url.com/uploads/resources/${filePath}`;
-    if (Platform.OS === "android") {
-      Linking.openURL(fileUrl); // Open file URL for Android
-    } else {
-      Linking.openURL(fileUrl); // Open file URL for iOS
-    }
-  };
+ 
 
   return (
-    <TouchableOpacity onPress={()=>router.push({pathname:"/module-detail", params:{moduleId:module._id}})} className="bg-white p-4 rounded-lg shadow-md mb-4">
+    <TouchableOpacity onPress={()=>router.push({pathname:"/module-detail", params:{moduleId:module._id}})} className="bg-white border-2 border-orange-500 p-4 rounded-lg shadow-sm mb-4">
       {/* Module Title */}
       <Text style={{fontFamily:"Font"}} className="text-xl font-semibold text-gray-800">{module.title}</Text>
       {/* Module Description */}
       <Text style={{fontFamily:"Font"}} className="text-base text-gray-600 mt-2">{module.description}</Text>
+      <Text>course last updated on {new Date(module?.updatedAt).toLocaleDateString()}</Text>
 
       
     </TouchableOpacity>

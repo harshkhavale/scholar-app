@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, View, Text } from 'react-native';
 import { useStripe } from '@stripe/stripe-react-native';
 import axios from 'axios';
+import { BASE_URL } from '@/utils/endpoints';
 
 
 
@@ -12,15 +13,27 @@ const PaymentScreen = () => {
   const fetchPaymentIntentClientSecret = async () => {
     try {
       // Call your backend to create a PaymentIntent
-      const response = await axios.post('http://localhost:5000/payments/create-payment-intent', {
-        amount: 2000,  // For example, amount in cents (20.00 USD)
+      const response = await axios.post(`${BASE_URL}/api/payments/create-payment-intent`, {
+        amount: 2000, // Amount in cents
       });
+  
+      if (!response.data || !response.data.clientSecret) {
+        throw new Error('Invalid response from backend. Missing clientSecret.');
+      }
+  
       return response.data.clientSecret;
-    } catch (error) {
-      console.error('Error fetching payment intent', error);
-      throw error;
+    } catch (error:any) {
+      if (error.response) {
+        console.error('Backend Error:', error.response.data);
+      } else if (error.request) {
+        console.error('No Response from Backend:', error.request);
+      } else {
+        console.error('Error Setting Up Request:', error.message);
+      }
+      throw error; // Propagate the error for further handling
     }
   };
+  
 
   const handlePayment = async () => {
     setLoading(true);

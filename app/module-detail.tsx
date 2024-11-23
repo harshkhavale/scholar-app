@@ -67,25 +67,7 @@ const ModuleComponent = () => {
     }
   }, [module]);
 
-  const downloadAndOpenPDF = async (url: string) => {
-    try {
-      const fileUri = `${FileSystem.documentDirectory}module.pdf`;
-      const { uri } = await FileSystem.downloadAsync(url, fileUri);
-      console.log("PDF downloaded to:", uri);
-
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(uri, {
-          mimeType: "application/pdf",
-          UTI: "com.adobe.pdf",
-        });
-      } else {
-        Alert.alert("Sharing not available on this platform.");
-      }
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-      Alert.alert("Error", "Failed to download PDF.");
-    }
-  };
+  
 
   if (isLoading) {
     return (
@@ -124,38 +106,7 @@ const ModuleComponent = () => {
       )}
 
       {/* Document Section */}
-      {module.resources.doc ? (
-        textContent ? (
-          <View className="bg-white rounded-lg p-4 shadow-md mt-6">
-            <Text className="text-base text-gray-800">{textContent}</Text>
-          </View>
-        ) : pdfContentUri ? (
-          <View className="h-96 mt-4">
-            {/* WebView for rendering the PDF */}
-            <WebView
-              source={{ uri: pdfContentUri }}
-              style={{ flex: 1 }}
-              javaScriptEnabled={true}
-              domStorageEnabled={true}
-              startInLoadingState={true}
-              renderLoading={() => (
-                <ActivityIndicator size="large" color="#FF8C00" className="mt-4" />
-              )}
-              onError={(error) => {
-                console.error("Error loading PDF in WebView:", error);
-                Alert.alert("Error", "Failed to load PDF.");
-              }}
-            />
-            <View className="mt-4">
-              <Button title="Download PDF" onPress={() => downloadAndOpenPDF(pdfContentUri)} />
-            </View>
-          </View>
-        ) : (
-          <Text className="text-gray-600 text-center">Loading document content...</Text>
-        )
-      ) : (
-        <Text className="text-gray-600 text-center mt-4">No document available for this module.</Text>
-      )}
+     {/* <PDFViewer pdfUrl={`${BASE_URL}/uploads/resources/${module.resources.doc}`}/> */}
     </ScrollView>
   );
 };

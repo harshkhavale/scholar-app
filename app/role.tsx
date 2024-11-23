@@ -20,7 +20,7 @@ export const roles: RoleCard[] = [
     value: "educator",
     description: "Teach courses, create content, and engage with students.",
     image: teacher,
-    path: "/(auth)", // Ensure this matches a valid file in your app's structure
+    path: "/payment", // Ensure this matches a valid file in your app's structure
   },
   {
     id: "learner",

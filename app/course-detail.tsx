@@ -41,17 +41,18 @@ const SegmentedControl: React.FC<{
   onSegmentChange: (segment: "module" | "reviews") => void;
 }> = ({ selectedSegment, onSegmentChange }) => {
   return (
-    <View className="flex-row mb-6 bg-gray-200 rounded-xl p-2 mt-8 shadow-lg">
+    <View className="flex-row mb-6 rounded-xl p-2 mt-8 border-2 border-gray-200">
       <Pressable
         onPress={() => onSegmentChange("module")}
         className={`flex-1 py-3 rounded-lg ${
-          selectedSegment === "module" ? "bg-orange-500" : "bg-transparent"
+          selectedSegment === "module" ? "border-2 border-orange-500" : "bg-transparent"
         }`}
       >
         <Text
           className={`text-center ${
-            selectedSegment === "module" ? "text-white font-semibold" : "text-gray-700"
+            selectedSegment === "module" ? "text-orange-500 font-semibold" : "text-gray-700"
           }`}
+          style={{fontFamily:"Font"}}
         >
           Modules
         </Text>
@@ -60,13 +61,14 @@ const SegmentedControl: React.FC<{
       <Pressable
         onPress={() => onSegmentChange("reviews")}
         className={`flex-1 py-3 rounded-lg ${
-          selectedSegment === "reviews" ? "bg-orange-500" : "bg-transparent"
+          selectedSegment === "reviews" ? "border-2 border-orange-500" : "bg-transparent"
         }`}
       >
         <Text
           className={`text-center ${
-            selectedSegment === "reviews" ? "text-white font-semibold" : "text-gray-700"
+            selectedSegment === "reviews" ? "text-orange-500 font-semibold" : "text-gray-700"
           }`}
+          style={{fontFamily:"Font"}}
         >
           Reviews
         </Text>
@@ -105,17 +107,22 @@ const CourseDetail = () => {
     >
       <View className="">
         {/* Language Badge */}
-        <View className="bg-lime-500 rounded-xl p-2 mb-4 w-32 justify-center items-center">
-          <Text className="text-white text-base">{data?.languages?.at(0)}</Text>
+        <View className=" flex-row gap-2 items-center">
+          {
+            data?.languages?.map((language,index) =>(
+              <Text className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min">{language}</Text>
+
+            ))
+          }
         </View>
 
         {/* Course Title */}
         <Text className=" text-3xl">{data?.title}</Text>
-        <Text className=" text-gray-700 text-xl">{data?.description}</Text>
+        <Text className=" text-gray-700 text-base">{data?.description}</Text>
 
         {/* Course Price */}
-        <Text className="text-3xl text-gray-700 mt-4">
-          {data?.price ? data?.price : "Free"}
+        <Text className="text-5xl text-gray-700 mt-8 font-bold text-center">
+          {data?.price ? "$"+data?.price : "FREE"}
         </Text>
 
         {/* Segmented Control */}

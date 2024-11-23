@@ -36,7 +36,7 @@ export default function RootLayout() {
   }
 
   return (
-    <StripeProvider publishableKey="pk_test_YourTestPublishableKey">
+    <StripeProvider publishableKey="pk_test_51QOILGSH110yHpHoCAmyefABVIAof9DipBQ4tPQcNq90Sm6QJOP86gXD3q1KhnehvRaoCyrLmvhSqh9OtcfqknDW00glUAyawx">
     <QueryClientProvider client={queryClient}>
       <Toast />
     <ThemeProvider value={colorScheme === 'light' ? DefaultTheme : DarkTheme}>
@@ -49,6 +49,8 @@ export default function RootLayout() {
         <Stack.Screen name="course-detail" />
         <Stack.Screen name="educator-detail" />
         <Stack.Screen name="module-detail" />
+        <Stack.Screen name="payment" />
+
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
