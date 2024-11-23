@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useWishlistStore } from "@/store/wishlist-store";
 import { Course } from "@/types/types";
 import { router } from "expo-router";
+import { BASE_URL } from "@/utils/endpoints";
 interface CourseItemProps {
   course: Course;
   customStyle?: string;
@@ -35,7 +36,7 @@ const CourseItem: React.FC<CourseItemProps> = ({
       >
         <Image
           source={{
-            uri: `http://192.168.0.104:5000/uploads/thumbnails/${course.thumbnail}`,
+            uri: `${BASE_URL}/uploads/thumbnails/${course.thumbnail}`,
           }}
           className="w-full h-40"
         />

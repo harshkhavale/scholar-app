@@ -55,12 +55,24 @@ export interface User {
 }
 
 export interface Educator {
-  user_id: User; // Reference to the User model's ObjectId
-  courses: Course[]; // Array of ObjectIds referencing the Course model
-  description?: string; // Optional description of the educator's background or courses
-  createdAt?: Date; // Timestamp for document creation, added by Mongoose
-  updatedAt?: Date; // Timestamp for document updates, added by Mongoose
+  _id?: string; // Unique identifier for the educator
+  user_id: User;
+  courses: string[]; // List of course IDs (can be empty)
+  description?: string; // Educator's description (optional)
+  fullName: string; // Full name of the educator
+  profile_image?: string | null; // Profile image URL (nullable)
+  background_image?: string | null; // Background image URL (nullable)
+  specialties: string[]; // List of specialties (can be empty)
+  contact_email?: string; // Public-facing contact email (optional)
+  social_links?: {
+    linkedin?: string ; // LinkedIn URL (optional)
+    twitter?: string ;// Twitter URL (optional)
+    [key: string]: string | undefined; // Support for other social links
+  };
+  createdAt: string; // Creation date of the educator record
+  updatedAt: string; // Last update date of the educator record
 }
+
 export interface Modules {
   total: number;
   modules: Module[];

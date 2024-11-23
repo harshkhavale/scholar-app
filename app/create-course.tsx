@@ -12,6 +12,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { useAuthStore } from "@/store/auth-store";
+import { BASE_URL } from "@/utils/endpoints";
 
 
 
@@ -71,7 +72,7 @@ export default function CreateCourse() {
       }
 
       const response = await axios.post(
-        "http://192.168.0.104:5000/api/courses",
+        `${BASE_URL}/api/courses`,
         formData,
         {
           headers: {

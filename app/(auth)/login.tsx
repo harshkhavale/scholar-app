@@ -22,7 +22,7 @@ const Login = () => {
     try {
       const formatedemail = email.toLowerCase();
       const response = await axios.post<Auth>(
-        "http://192.168.0.104:5000/api/auth/login",
+        `${BASE_URL}/api/auth/login`,
         {
           email: formatedemail,
           password,
@@ -113,22 +113,17 @@ const Login = () => {
           </View>
         </View>
        
-        <Text
-          style={{ fontFamily: "Font" }}
-          className="flex-row  justify-center items-center py-4"
-        >
-          <Text style={{ fontFamily: "Font" }} className="text-center">
-            Already have an account?{" "}
-          </Text>
-          <Pressable
-            onPress={() => router.push("/(auth)/register")}
-            className="text-center"
+        <View className=" flex-row items-center justify-center gap-2">
+        <Text> Don't have any account ?</Text>
+        <Pressable onPress={() => router.push("/role")}>
+          <Text
+            style={{ fontFamily: "Font" }}
+            className="text-orange-500 text-lg"
           >
-            <Text style={{ fontFamily: "Font" }} className="text-orange-500 ">
-              Register{" "}
-            </Text>
-          </Pressable>
-        </Text>
+            Register
+          </Text>
+        </Pressable>
+      </View>
       </Animated.View>
       <Animated.View
         entering={FadeInDown.duration(300).delay(600).springify()}

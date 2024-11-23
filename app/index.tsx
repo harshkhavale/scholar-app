@@ -13,7 +13,7 @@ export default function App() {
    if(user){
     router.push("/(tabs)");
    }
- },[user]);
+ },[]);
   return (
     <View className='gap-4 flex-1 w-full justify-center items-center happy'>
       <Animated.View entering={FadeInDown.duration(300).springify()} className='w-full flex justify-center px-8 items-center'>

@@ -15,6 +15,7 @@ import { Course } from "@/types/types";
 import { useAuthStore } from "@/store/auth-store";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
+import { BASE_URL } from "@/utils/endpoints";
 
 export default function CoursesScreen() {
   const { user } = useAuthStore();
@@ -28,7 +29,7 @@ export default function CoursesScreen() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.0.104:5000/api/courses"
+          `${BASE_URL}/api/courses`
         );
         setCourses(response.data);
         setFilteredCourses(response.data);
@@ -58,7 +59,7 @@ export default function CoursesScreen() {
       {/* Course Image */}
       <Image
         source={{
-          uri: `http://192.168.0.104:5000/uploads/thumbnails/${item?.thumbnail}`,
+          uri: `${BASE_URL}/uploads/thumbnails/${item?.thumbnail}`,
         }}
         className="h-32 w-full rounded-t-xl"
         resizeMode="cover"

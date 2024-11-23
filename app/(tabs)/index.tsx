@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import Feather from '@expo/vector-icons/Feather';
+import Feather from "@expo/vector-icons/Feather";
 
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -22,7 +22,8 @@ import { useQuery } from "@tanstack/react-query";
 import CourseItem from "@/components/CourseItem";
 import { Course } from "@/types/types";
 import { useAuthStore } from "@/store/auth-store";
-import { add } from "@/assets";
+import { add, add2 } from "@/assets";
+import { BASE_URL } from "@/utils/endpoints";
 
 interface Topic {
   id: string;
@@ -42,24 +43,7 @@ const topics: Topic[] = [
 const fetchCourses = async (searchTerm?: string): Promise<Course[]> => {
   try {
     const response = await axios.get(
-      `http://192.168.0.104:5000/api/courses`
-      //   , {
-      //   params: { search: searchTerm },
-      //   headers: {
-      //     Authorization: `Bearer ${Constants.extra?.token}`,
-      //   },
-      // }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching courses:", error);
-    throw error;
-  }
-};
-const fetchRecommendedCourses = async (): Promise<Course[]> => {
-  try {
-    const response = await axios.get(
-      `http://192.168.0.104:5000/api/courses`
+      `${BASE_URL}/api/courses`
       //   , {
       //   params: { search: searchTerm },
       //   headers: {
@@ -85,16 +69,7 @@ export default function HomeScreen() {
     queryFn: () => fetchCourses(selectedTopic),
     enabled: true,
   });
-  const {
-    data: recommendedcourses,
-    error: recommendedcourseserror,
-    isLoading: recommendedcoursesloading,
-    refetch: recommendedcoursesrefetch,
-  } = useQuery({
-    queryKey: ["recommendedcourses"],
-    queryFn: () => fetchRecommendedCourses(),
-    enabled: true,
-  });
+
   const renderTopic = (item: Topic) => {
     return (
       <Pressable
@@ -123,14 +98,14 @@ export default function HomeScreen() {
   };
   const getTimeBasedGreeting = () => {
     const currentHour = new Date().getHours();
-  
+
     if (currentHour < 12) return "Good Morning";
     if (currentHour < 18) return "Good Afternoon";
     return "Good Evening";
   };
   const [greeting, setGreeting] = useState(getTimeBasedGreeting());
   return (
-    <View className="flex-1 bg-white">
+    <ScrollView className="flex-1 bg-white">
       {/* #topbar-orange */}
       <View className="pt-8 pb-6 px-6 bg-orange-500 text-white">
         <Animated.View className="flex-row justify-between items-center">
@@ -141,7 +116,7 @@ export default function HomeScreen() {
                 className="text-white text-lg"
               >
                 {greeting}
-                </Text>
+              </Text>
               <View>
                 <HelloWave />
               </View>
@@ -150,41 +125,41 @@ export default function HomeScreen() {
               className="text-white text-2xl"
               style={{ fontFamily: "Font" }}
             >
-             {user?.fullName}
+              {user?.fullName}
             </Text>
           </View>
           <View>
-          <View>
-  {/* Dropdown Trigger */}
-  <Pressable onPress={() => setShowDropdown(!showDropdown)}>
-    <Ionicons 
-      name="menu-sharp"
-      size={30}
-      color="white"
-    />
-  </Pressable>
+            <View>
+              {/* Dropdown Trigger */}
+              <Pressable onPress={() => setShowDropdown(!showDropdown)}>
+                <Ionicons name="menu-sharp" size={30} color="white" />
+              </Pressable>
 
-  {/* Dropdown Menu */}
-  {showDropdown && (
-    <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
-      <View className="absolute w-40 right-0 mt-2 bg-white rounded-md shadow-lg z-10">
-        <Pressable
-          onPress={() => {
-            setShowDropdown(false);
-            logout(); // Call your logout function
-            router.push("/(auth)/login"); // Redirect to login screen
-          }}
-          className="p-4"
-        >
-          <Text className="text-gray-700" style={{ fontFamily: "Font" }}>
-            Logout
-          </Text>
-        </Pressable>
-      </View>
-    </TouchableWithoutFeedback>
-  )}
-</View>
-
+              {/* Dropdown Menu */}
+              {showDropdown && (
+                <TouchableWithoutFeedback
+                  onPress={() => setShowDropdown(false)}
+                >
+                  <View className="absolute w-40 right-0 mt-2 bg-white rounded-md shadow-lg z-10">
+                    <Pressable
+                      onPress={() => {
+                        setShowDropdown(false);
+                        logout(); // Call your logout function
+                        router.push("/(auth)/login"); // Redirect to login screen
+                      }}
+                      className="p-4"
+                    >
+                      <Text
+                        className="text-gray-700"
+                        style={{ fontFamily: "Font" }}
+                      >
+                        Logout
+                      </Text>
+                    </Pressable>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
+            </View>
           </View>
         </Animated.View>
         <Pressable onPress={() => router.push("/explore")}>
@@ -196,13 +171,10 @@ export default function HomeScreen() {
           </View>
         </Pressable>
       </View>
-     
+
       {/* #topic-scroll */}
       <ScrollView className="flex-1 bg-white gap-4">
-      <Image
-          source={add}
-          className=" h-60 w-full"
-        />
+        <Image source={add} className=" h-60 w-full" />
         <Animated.View
           className="gap-6"
           entering={FadeInDown.duration(500).delay(200).springify()}
@@ -253,8 +225,9 @@ export default function HomeScreen() {
             </Text>
           </View>
         )}
-       
       </ScrollView>
-    </View>
+
+      <Image source={add2} className=" w-[28rem] h-[32rem] mt-8" />
+    </ScrollView>
   );
 }

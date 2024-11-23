@@ -7,6 +7,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import { BASE_URL } from "@/utils/endpoints";
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
@@ -77,7 +78,7 @@ const Register = () => {
       const formatedemail = email.toLowerCase();
   
       const response = await axios.post(
-        "http://192.168.0.104:5000/api/auth/register",
+        `${BASE_URL}/api/auth/register`,
         {
           fullName,
           email: formatedemail,
@@ -176,17 +177,17 @@ const Register = () => {
 
         
 
-        <Text
-          style={{ fontFamily: "Font" }}
-          className="text-center leading-[3.5rem] flex justify-center items-center"
-        >
-          Already have an account?{" "}
-          <Pressable onPress={() => router.push("/(auth)/login")}>
-            <Text style={{ fontFamily: "Font" }} className="text-orange-500">
-              Login
-            </Text>
-          </Pressable>
-        </Text>
+        <View className=" flex-row items-center justify-center gap-2">
+        <Text> Already have an account?</Text>
+        <Pressable onPress={() => router.push("/(auth)/login")}>
+          <Text
+            style={{ fontFamily: "Font" }}
+            className="text-orange-500 text-lg"
+          >
+            Login
+          </Text>
+        </Pressable>
+      </View>
       </Animated.View>
 
       <Animated.View

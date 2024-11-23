@@ -8,12 +8,13 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import ModuleList from "@/components/ModuleList";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Button from "@/components/Button";
+import { BASE_URL } from "@/utils/endpoints";
 
 // Fetch course, modules, and reviews data
 const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
   try {
     const response = await axios.get<Course>(
-      `http://192.168.0.104:5000/api/courses/${courseId}`
+      `${BASE_URL}/api/courses/${courseId}`
     );
     return response.data;
   } catch (error) {
@@ -25,7 +26,7 @@ const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
 const fetchCourseModules = async (courseId?: string): Promise<Modules> => {
   try {
     const response = await axios.get<Modules>(
-      `http://192.168.0.104:5000/api/courses/${courseId}/modules`
+      `${BASE_URL}/api/courses/${courseId}/modules`
     );
     return response.data;
   } catch (error) {
@@ -96,7 +97,7 @@ const CourseDetail = () => {
       headerImage={
         <Image
           source={{
-            uri: `http://192.168.0.104:5000/uploads/thumbnails/${data?.thumbnail}`,
+            uri: `${BASE_URL}/uploads/thumbnails/${data?.thumbnail}`,
           }}
           className="w-full h-72 rounded-lg shadow-xl"
         />
