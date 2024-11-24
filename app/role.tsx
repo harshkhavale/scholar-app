@@ -48,7 +48,7 @@ const RoleSelectionScreen = () => {
       >
         <Text
           style={{ fontFamily: "Font" }}
-          className="text-4xl text-center leading-[3.5rem]"
+          className="text-4xl text-center mt-8 leading-[3.5rem]"
         >
           Select Your Role
         </Text>

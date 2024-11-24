@@ -119,9 +119,7 @@ const CreateCourse = () => {
   return (
     <View className="flex-1">
       <View className="p-6">
-        <Text style={{ fontFamily: "Font" }} className="text-2xl text-orange-500 mb-6">
-          Create a New Course
-        </Text>
+        
 
         <ScrollView className="rounded-lg h-[80vh]">
           {/* Title */}

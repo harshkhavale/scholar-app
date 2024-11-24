@@ -49,7 +49,7 @@ export interface User {
   email: string; // User's email address, must be unique
   password: string; // User's hashed password
   plan: "free" | "premium" | "enterprise"; // User's subscription plan
-  enrolls?: Course[]; // Array of ObjectIds referencing the Course model
+  enrolls?: string[]; // Array of ObjectIds referencing the Course model
   userType: "student" | "educator" | "admin"; // User role
   createdAt?: Date; // Optional created timestamp, added by Mongoose
   updatedAt?: Date; // Optional updated timestamp, added by Mongoose
@@ -81,5 +81,6 @@ export interface Modules {
 export interface Auth {
   token: string;
   user: User;
+  educator?:Educator;
   message?: string | null;
 }

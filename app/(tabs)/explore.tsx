@@ -87,7 +87,7 @@ export default function CoursesScreen() {
   );
 
   return (
-    <View className="flex-1 bg-gray-100 mt-6">
+    <View className="flex-1 mt-12">
       {/* Search Bar */}
       <View className="w-full px-4 pb-8">
   {user?.userType === "educator" ? (

@@ -17,6 +17,7 @@ const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const setUser = useAuthStore((state) => state.setUser);
   const setToken = useAuthStore((state) => state.setToken);
+  const setEducator = useAuthStore((state) => state.setEducator);
 
   const handleLogin = async () => {
     try {
@@ -33,6 +34,9 @@ const Login = () => {
   
       if (response.status === 200) {
         setUser(data.user);
+        if(data.user.userType === "educator"){
+          setEducator(data.educator);
+        }
         setToken(data.token);
   
         // Show success toast and delay navigation

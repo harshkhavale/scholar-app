@@ -1,5 +1,13 @@
-import { View, Text, Image, Pressable, TextInput } from "react-native";
-import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Course, Modules } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
@@ -7,8 +15,12 @@ import { router, useLocalSearchParams } from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import ModuleList from "@/components/ModuleList";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import Button from "@/components/Button";
 import { BASE_URL } from "@/utils/endpoints";
+import { useStripe } from "@stripe/stripe-react-native";
+import Toast from "react-native-toast-message";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useAuthStore } from "@/store/auth-store";
 
 // Fetch course, modules, and reviews data
 const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
@@ -45,14 +57,18 @@ const SegmentedControl: React.FC<{
       <Pressable
         onPress={() => onSegmentChange("module")}
         className={`flex-1 py-3 rounded-lg ${
-          selectedSegment === "module" ? "border-2 border-orange-500" : "bg-transparent"
+          selectedSegment === "module"
+            ? "border-2 border-orange-500"
+            : "bg-transparent"
         }`}
       >
         <Text
           className={`text-center ${
-            selectedSegment === "module" ? "text-orange-500 font-semibold" : "text-gray-700"
+            selectedSegment === "module"
+              ? "text-orange-500 font-semibold"
+              : "text-gray-700"
           }`}
-          style={{fontFamily:"Font"}}
+          style={{ fontFamily: "Font" }}
         >
           Modules
         </Text>
@@ -61,14 +77,18 @@ const SegmentedControl: React.FC<{
       <Pressable
         onPress={() => onSegmentChange("reviews")}
         className={`flex-1 py-3 rounded-lg ${
-          selectedSegment === "reviews" ? "border-2 border-orange-500" : "bg-transparent"
+          selectedSegment === "reviews"
+            ? "border-2 border-orange-500"
+            : "bg-transparent"
         }`}
       >
         <Text
           className={`text-center ${
-            selectedSegment === "reviews" ? "text-orange-500 font-semibold" : "text-gray-700"
+            selectedSegment === "reviews"
+              ? "text-orange-500 font-semibold"
+              : "text-gray-700"
           }`}
-          style={{fontFamily:"Font"}}
+          style={{ fontFamily: "Font" }}
         >
           Reviews
         </Text>
@@ -77,22 +97,106 @@ const SegmentedControl: React.FC<{
   );
 };
 
-const CourseDetail = () => {
+const CourseDetail = ({navigation}:any) => {
+  const { user } = useAuthStore();
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
-  const [selectedSegment, setSelectedSegment] = useState<"module" | "reviews">("module");
+  const [selectedSegment, setSelectedSegment] = useState<"module" | "reviews">(
+    "module"
+  );
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [loading, setLoading] = useState(false);
+  
+  const fetchPaymentIntentClientSecret = async (amount: number) => {
+    try {
+      // Call your backend to create a PaymentIntent
+      const response = await axios.post(
+        `${BASE_URL}/api/payments/create-payment-intent`,
+        {
+          amount: amount, // Amount in cents
+        }
+      );
 
+      if (!response.data || !response.data.clientSecret) {
+        throw new Error("Invalid response from backend. Missing clientSecret.");
+      }
+
+      return response.data.clientSecret;
+    } catch (error: any) {
+      if (error.response) {
+        console.error("Backend Error:", error.response.data);
+      } else if (error.request) {
+        console.error("No Response from Backend:", error.request);
+      } else {
+        console.error("Error Setting Up Request:", error.message);
+      }
+      throw error; // Propagate the error for further handling
+    }
+  };
+  const handlePayment = async (amount: number) => {
+    console.log("Payment");
+    setLoading(true);
+
+    try {
+      if (amount > 0) {
+        // Fetch the client secret from the backend
+        const clientSecret = await fetchPaymentIntentClientSecret(amount); // This should come from your server
+
+        // Initialize the Payment Sheet
+        const { error: initError } = await initPaymentSheet({
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: "Scholar", // Display the merchant name
+        });
+
+        if (initError) {
+          console.error(initError);
+          setLoading(false);
+          return;
+        }
+
+        // Present the Payment Sheet
+        const { error: paymentError } = await presentPaymentSheet();
+
+        if (paymentError) {
+          console.error(paymentError);
+          Toast.show({
+            type: "error",
+            text1: "Payment Failed!",
+          });
+        } else {
+          Toast.show({
+            type: "success",
+            text1: "Payment Successful",
+            text2: "let's go....!",
+          });
+          console.log("Payment completed successfully");
+          //to-do
+        }
+      } else {
+        //to-do
+      }
+    } catch (error) {
+      console.error("Payment failed", error);
+    }
+
+    setLoading(false);
+  };
   const { data, error, isLoading, refetch } = useQuery<Course>({
     queryKey: ["course-details", courseId],
     queryFn: () => fetchCourseDetail(courseId || ""),
     enabled: true,
   });
 
-  const { data: modulesData, error: modulesError, isLoading: modulesIsLoading, refetch: modulesRefetch } = useQuery<Modules>({
+  const {
+    data: modulesData,
+    error: modulesError,
+    isLoading: modulesIsLoading,
+    refetch: modulesRefetch,
+  } = useQuery<Modules>({
     queryKey: ["course-modules", courseId],
     queryFn: () => fetchCourseModules(courseId || ""),
     enabled: !!courseId,
   });
-
+  
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -101,19 +205,18 @@ const CourseDetail = () => {
           source={{
             uri: `${BASE_URL}/uploads/thumbnails/${data?.thumbnail}`,
           }}
-          className="w-full h-72 rounded-lg shadow-xl"
+          className="w-full h-72 relative rounded-lg shadow-xl"
         />
       }
     >
       <View className="">
         {/* Language Badge */}
         <View className=" flex-row gap-2 items-center">
-          {
-            data?.languages?.map((language,index) =>(
-              <Text className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min">{language}</Text>
-
-            ))
-          }
+          {data?.languages?.map((language, index) => (
+            <Text className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min">
+              {language}
+            </Text>
+          ))}
         </View>
 
         {/* Course Title */}
@@ -122,11 +225,14 @@ const CourseDetail = () => {
 
         {/* Course Price */}
         <Text className="text-5xl text-gray-700 mt-8 font-bold text-center">
-          {data?.price ? "$"+data?.price : "FREE"}
+          {data?.price ? "$" + data?.price : "FREE"}
         </Text>
 
         {/* Segmented Control */}
-        <SegmentedControl selectedSegment={selectedSegment} onSegmentChange={setSelectedSegment} />
+        <SegmentedControl
+          selectedSegment={selectedSegment}
+          onSegmentChange={setSelectedSegment}
+        />
 
         {/* Conditional Display: Modules or Reviews */}
         {selectedSegment === "module" ? (
@@ -149,14 +255,35 @@ const CourseDetail = () => {
           </View>
         )}
       </View>
-      <Button title="add module" action={() =>router.push({pathname:"/(module)/create-module",params:{courseId:courseId}})} />
 
-      {/* Enroll Button */}
+      <TouchableOpacity
+        onPress={() =>
+          router.push({
+            pathname: "/(module)/create-module",
+            params: { courseId: courseId },
+          })
+        }
+        className="bg-blue-500 absolute top-2 right-2 m-2 p-2 h-12 w-12 flex justify-center items-center rounded-xl"
+      >
+        <MaterialIcons name="playlist-add" size={30} color="#FFFFFF" />
+      </TouchableOpacity>
+
       <Animated.View
         entering={FadeInDown.duration(300).delay(600).springify()}
         className="w-full flex justify-center items-center mb-8"
       >
-        <Button title="Enroll Now" action={() => console.log("Enrolled")} />
+        {user?.enrolls?.includes(courseId) ? (
+          ""
+        ) : (
+          <Pressable
+            className="bg-blue-500 fixed bottom p-2 px-4 rounded-2xl w-full flex justify-center items-center"
+            onPress={() => handlePayment(data?.price ? 200 : 200)}
+          >
+            <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
+              {loading ? "Wait a minute" : "Enroll now"}
+            </Text>
+          </Pressable>
+        )}
       </Animated.View>
     </ParallaxScrollView>
   );

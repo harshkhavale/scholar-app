@@ -107,7 +107,7 @@ export default function HomeScreen() {
   return (
     <ScrollView className="flex-1 bg-white">
       {/* #topbar-orange */}
-      <View className="pt-8 pb-6 px-6 bg-orange-500 text-white">
+      <View className="pt-12 pb-6 px-6 bg-orange-500 text-white">
         <Animated.View className="flex-row justify-between items-center">
           <View>
             <View className="flex-row items-end gap-2">
