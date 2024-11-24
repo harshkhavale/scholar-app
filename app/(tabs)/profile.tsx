@@ -54,6 +54,8 @@ export default function EducatorProfile() {
           `${BASE_URL}/api/educators/user/${user?.id}`
         );
         setEducatorData(response.data);
+        setBannerPic(`${BASE_URL}/uploads/thumbnails/${response.data.banner_image}`);
+        console.log(`${BASE_URL}/uploads/thumbnails/${response.data.banner_image}`);
         setProfilePic(`${BASE_URL}/uploads/thumbnails/${response.data.profile_image}`);
       } catch (error) {
         console.error("Error fetching educator data:", error);
@@ -163,7 +165,7 @@ export default function EducatorProfile() {
           <Image
             source={
               profilePic
-                ? { uri: profilePic }
+                ? { uri: bannerPic }
                 : require("@/assets/images/placeholder.png")
             }
             className="w-full h-48 object-cover"

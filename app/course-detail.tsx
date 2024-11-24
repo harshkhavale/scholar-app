@@ -149,6 +149,7 @@ const CourseDetail = () => {
           </View>
         )}
       </View>
+      <Button title="add module" action={() =>router.push({pathname:"/(module)/create-module",params:{courseId:courseId}})} />
 
       {/* Enroll Button */}
       <Animated.View

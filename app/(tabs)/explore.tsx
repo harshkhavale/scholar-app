@@ -93,7 +93,7 @@ export default function CoursesScreen() {
   {user?.userType === "educator" ? (
     <View className="flex-row items-center gap-2">
       {/* Add Folder Button */}
-      <Pressable onPress={()=>router.push("/create-course")} className="bg-orange-500 p-3 rounded-2xl shadow-lg">
+      <Pressable onPress={()=>router.push("/(course)/create-course")} className="bg-orange-500 p-3 rounded-2xl shadow-lg">
         <AntDesign name="addfolder" size={24} color="#FFFFFF" />
       </Pressable>
 

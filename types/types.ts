@@ -42,6 +42,7 @@ export interface Module {
   __v: number;
 }
 export interface User {
+  id?: string;
   _id?: string; 
   profilePic?: string; // Optional URL or path to the profile picture
   fullName: string; // Full name of the user

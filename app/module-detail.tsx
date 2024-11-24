@@ -105,8 +105,7 @@ const ModuleComponent = () => {
         <Text className="text-gray-600 text-center">No video available for this module.</Text>
       )}
 
-      {/* Document Section */}
-     {/* <PDFViewer pdfUrl={`${BASE_URL}/uploads/resources/${module.resources.doc}`}/> */}
+      
     </ScrollView>
   );
 };
