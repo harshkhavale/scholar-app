@@ -14,7 +14,7 @@ import { Course } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "@/utils/endpoints";
 import { router } from "expo-router";
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
 export default function EducatorProfile() {
   const user = useAuthStore((state) => state.user);
@@ -55,21 +55,12 @@ export default function EducatorProfile() {
             `${BASE_URL}/api/educators/user/${user?.id}`
           );
           setUserData(response.data);
-          setProfilePic(
-            `${BASE_URL}/uploads/profiles/${response.data.profile_image}`
-          );
-          setBannerPic(
-            `${BASE_URL}/uploads/profiles/${response.data.banner_image}`
-          );
+          
         } else {
           const response = await axios.get(`${BASE_URL}/api/users/${user?.id}`);
           setUserData(response.data);
-          setProfilePic(
-            `${BASE_URL}/uploads/profiles/${response.data.profile_image}`
-          );
-          console.log(
-            `${BASE_URL}/uploads/profiles/${response.data.profilePic}`
-          );
+         
+          
         }
       } catch (error) {
         console.error("Error fetching educator data:", error);
@@ -95,7 +86,7 @@ export default function EducatorProfile() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: [2, 1],
       quality: 1,
     });
 
@@ -167,49 +158,59 @@ export default function EducatorProfile() {
     );
   }
   return (
-    <ScrollView className="flex-1">
-      <View className=" relative">
+    <ScrollView className="flex-1 mt-10">
+      <View className="relative">
         {user?.userType === "educator" && (
           <View>
-            <TouchableOpacity
-              onPress={handleBannerImagePicker}
-              className=" mb-20"
-            >
-              <Image
-  source={bannerPic || require('@/assets/images/upload.png')}
-  style={{ width: '100%', height: 150 }}
-  contentFit="contain"
-  placeholder={require('@/assets/images/upload.png')}
-  className="bg-red-500"
-/>
-            </TouchableOpacity>
+            <TouchableOpacity onPress={handleBannerImagePicker} className="mb-20 h-36 bg-orange-500">
+  {bannerPic ? (
+    <Image
+      source={{ uri: bannerPic }}
+      style={{ width: "100%", height: 120 }}
+      resizeMode="cover"
+    />
+  ) : (
+    <Image
+      source={require("@/assets/images/placeholder1.png")}
+      style={{ width: "100%", height: 54, marginTop:54, marginLeft:150 }}
+      resizeMode="contain"
+    />
+  )}
+</TouchableOpacity>
+
           </View>
         )}
 
-        <View className=" px-8 pt-6">
+        <View className=" px-8 pt-2">
           <Text
             style={{ fontFamily: "Font" }}
             className="text-2xl text-orange-500 mb-6"
           >
-            {user?.userType === "educator" ? "Update Educator Profile" : "User Profile"}
+            {user?.userType === "educator"
+              ? "Update Educator Profile"
+              : "User Profile"}
           </Text>
           <View
             className={`${
-              user?.userType === "educator" ? "absolute -top-48 left-6 pb-0" : " pb-8"
+              user?.userType === "educator"
+                ? "absolute -top-48 left-6 pb-0"
+                : " pb-8"
             }`}
           >
             <TouchableOpacity onPress={handleImagePicker}>
-            <Image
-  source={profilePic || require('@/assets/images/upload.png')}
-  style={{
-    width: 160, // w-40 in Tailwind
-    height: 160, // h-40 in Tailwind
-    borderRadius: 8, // rounded-lg in Tailwind
-    borderWidth: 4, // border-4 in Tailwind
-    borderColor: 'orange', // border-orange-500 in Tailwind
-  }}
-  contentFit="cover"
-/>
+              <Image
+                source={profilePic || require("@/assets/images/placeholder1.png")}
+                style={{
+                  width: 140, // w-40 in Tailwind
+                  height: 140, // h-40 in Tailwind
+                  borderRadius: 8, // rounded-lg in Tailwind
+                  borderWidth: 4, // border-4 in Tailwind
+                  borderColor: "orange", // border-orange-500 in Tailwind
+                }}
+                alt="@/assets/images/upload.png"
+                contentFit="cover"
+                placeholder={"@/assets/images/upload.png"}
+              />
             </TouchableOpacity>
           </View>
           {/* FullName */}
@@ -427,10 +428,12 @@ export default function EducatorProfile() {
                   </View>
                   <View>
                     <Image
-                      source={{
-                        uri: `${BASE_URL}/uploads/thumbnails/${course.thumbnail}`,
-                      }}
-                      className=" w-20 h-24"
+                        source={{
+                          uri: `${BASE_URL}/uploads/thumbnails/${course.thumbnail}`,
+                        }}
+                      placeholder={"@assets/images/thumbnail1.png"}
+                      className="w-20 h-24"
+                      resizeMode="cover"
                     />
                   </View>
                 </View>

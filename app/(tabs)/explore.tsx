@@ -28,9 +28,7 @@ export default function CoursesScreen() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}/api/courses`
-        );
+        const response = await axios.get(`${BASE_URL}/api/courses`);
         setCourses(response.data);
         setFilteredCourses(response.data);
       } catch (error) {
@@ -53,35 +51,68 @@ export default function CoursesScreen() {
 
   const renderCourseItem = ({ item }: { item: Course }) => (
     <TouchableOpacity
-      className="flex-1 m-2 bg-white rounded-xl shadow-md"
-      onPress={() => router.push({pathname:"/course-detail",params:{courseId:item._id}})}
+      className="flex-1 m-[2px] bg-white rounded-xl shadow-md overflow-hidden"
+      onPress={() =>
+        router.push({
+          pathname: "/course-detail",
+          params: { courseId: item._id },
+        })
+      }
     >
-      {/* Course Image */}
-      <Image
-        source={{
-          uri: `${BASE_URL}/uploads/thumbnails/${item?.thumbnail}`,
-        }}
-        className="h-32 w-full rounded-t-xl"
-        resizeMode="cover"
-      />
-
-      {/* Course Info */}
-      <View className="p-3">
+      {/* Course Image with Gradient Overlay */}
+      <View className="relative">
+        <Image
+          source={{
+            uri: `${BASE_URL}/uploads/thumbnails/${item?.thumbnail}`,
+          }}
+          className="h-48 w-full object-cover"
+          resizeMode="cover"
+        />
+        <View className="absolute bottom-0 left-0 right-0 bg-black/65 p-3">
         <Text
-          className="text-base font-semibold text-gray-800 mb-2"
+          className="text-white text-lg font-semibold"
           numberOfLines={2}
+          style={{fontFamily:"Font"}}
         >
           {item.title}
         </Text>
-        {/* Price and Rating */}
-        <View className="flex-row items-center">
-          <Text className="text-orange-500 text-sm font-bold">
+      </View>
+      </View>
+
+      {/* Course Info */}
+      <View className="p-4">
+        <View className="flex-row justify-between items-center">
+          {/* Price */}
+          <Text className="text-orange-500 text-lg font-bold">
             ${item.price || "Free"}
           </Text>
-          <View className="flex-row items-center ml-3">
-            <Ionicons name="star" size={16} color="#FFD700" />
+
+          {/* Rating */}
+          <View className="flex-row items-center">
+            <Ionicons name="star" size={18} color="#FFD700" />
+            <Text className="ml-1 text-sm text-gray-600">4.5</Text>{" "}
+            {/* Update rating dynamically */}
           </View>
         </View>
+
+        {/* Topics */}
+        {item.topics && item.topics.length > 0 && (
+          <View className="mt-2">
+            <Text className="text-sm text-gray-500">Topics:</Text>
+            <View className="flex-row flex-wrap gap-1 mt-1">
+              {item.topics.slice(0, 3).map((topic, index) => (
+                <Text key={index} className="text-xs bg-blue-600 text-white rounded-full p-1">
+                  {topic}
+                </Text>
+              ))}
+              {item.topics.length > 3 && (
+                <Text className="text-sm text-gray-500">
+                  +{item.topics.length - 3} more
+                </Text>
+              )}
+            </View>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -90,38 +121,40 @@ export default function CoursesScreen() {
     <View className="flex-1 mt-12">
       {/* Search Bar */}
       <View className="w-full px-4 pb-8">
-  {user?.userType === "educator" ? (
-    <View className="flex-row items-center gap-2">
-      {/* Add Folder Button */}
-      <Pressable onPress={()=>router.push("/(course)/create-course")} className="bg-orange-500 p-3 rounded-2xl shadow-lg">
-        <AntDesign name="addfolder" size={24} color="#FFFFFF" />
-      </Pressable>
+        {user?.userType === "educator" ? (
+          <View className="flex-row items-center gap-2">
+            {/* Add Folder Button */}
+            <Pressable
+              onPress={() => router.push("/(course)/create-course")}
+              className="bg-orange-500 p-3 rounded-2xl shadow-lg"
+            >
+              <AntDesign name="addfolder" size={24} color="#FFFFFF" />
+            </Pressable>
 
-      {/* Search Bar */}
-      <View className="flex-1 flex-row items-center bg-white p-3 rounded-2xl shadow-md">
-        <Ionicons name="search" size={20} color="#777" />
-        <TextInput
-          className="flex-1 ml-2 text-base"
-          placeholder="Search courses..."
-          onChangeText={setSearchTerm}
-          value={searchTerm}
-        />
+            {/* Search Bar */}
+            <View className="flex-1 flex-row items-center bg-white p-3 rounded-2xl shadow-md">
+              <Ionicons name="search" size={20} color="#777" />
+              <TextInput
+                className="flex-1 ml-2 text-base"
+                placeholder="Search courses..."
+                onChangeText={setSearchTerm}
+                value={searchTerm}
+              />
+            </View>
+          </View>
+        ) : (
+          <View className="flex-row items-center bg-white p-3 rounded-2xl shadow-md">
+            {/* Search Bar */}
+            <Ionicons name="search" size={20} color="#777" />
+            <TextInput
+              className="flex-1 ml-2 text-base"
+              placeholder="Search courses..."
+              onChangeText={setSearchTerm}
+              value={searchTerm}
+            />
+          </View>
+        )}
       </View>
-    </View>
-  ) : (
-    <View className="flex-row items-center bg-white p-3 rounded-2xl shadow-md">
-      {/* Search Bar */}
-      <Ionicons name="search" size={20} color="#777" />
-      <TextInput
-        className="flex-1 ml-2 text-base"
-        placeholder="Search courses..."
-        onChangeText={setSearchTerm}
-        value={searchTerm}
-      />
-    </View>
-  )}
-</View>
-
 
       {/* Courses Grid */}
       {loading ? (

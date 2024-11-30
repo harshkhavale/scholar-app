@@ -42,10 +42,10 @@ const CourseItem: React.FC<CourseItemProps> = ({
         />
 
         <View className="px-4 p-2">
-          <Text className=" text-lg font-semibold" style={{ fontFamily: "Font" }}>
+          <Text className=" text-lg font-semibold h-9 text-ellipsis" style={{ fontFamily: "Font" }}>
             {course.title}
           </Text>
-          <Text className=" text-sm text-gray-500 truncate h-12" style={{ fontFamily: "Font" }}>
+          <Text className=" text-sm text-gray-500 truncate text-ellipsis h-12" style={{ fontFamily: "Font" }}>
             {course.description}
           </Text>
           <View className="flex-row items-center pt-2 pb-4 justify-between">
@@ -56,7 +56,7 @@ const CourseItem: React.FC<CourseItemProps> = ({
               <Ionicons
                 size={24}
                 name={isWishlisted ? "heart" : "heart-outline"}
-                color={isWishlisted ? "red" : "gray"}
+                color={isWishlisted ? "orange" : "gray"}
               />
             </Pressable>
           </View>

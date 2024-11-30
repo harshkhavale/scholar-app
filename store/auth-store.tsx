@@ -8,18 +8,26 @@ interface AuthState {
   token: string | null;
 
   setUser: (user: User) => void;
-  setEducator: (educator: Educator| undefined) => void;
+  setEducator: (educator: Educator | undefined) => void;
   setToken: (token: string) => void;
 
+  updateUser: (updatedFields: Partial<User>) => void; // New function for updating specific fields
   clearAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  token: null,
   educator: null,
+  token: null,
+
   setUser: (user) => set({ user }),
   setEducator: (educator) => set({ educator }),
   setToken: (token) => set({ token }),
-  clearAuth: () => set({ user: null, token: null }),
+
+  updateUser: (updatedFields) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, ...updatedFields } : null,
+    })),
+
+  clearAuth: () => set({ user: null, token: null, educator: null }),
 }));

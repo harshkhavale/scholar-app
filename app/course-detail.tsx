@@ -53,7 +53,7 @@ const SegmentedControl: React.FC<{
   onSegmentChange: (segment: "module" | "reviews") => void;
 }> = ({ selectedSegment, onSegmentChange }) => {
   return (
-    <View className="flex-row mb-6 rounded-xl p-2 mt-8 border-2 border-gray-200">
+    <View className="flex-row mb-12 rounded-xl p-2 mt-8 border-2 border-gray-200">
       <Pressable
         onPress={() => onSegmentChange("module")}
         className={`flex-1 py-3 rounded-lg ${
@@ -97,15 +97,82 @@ const SegmentedControl: React.FC<{
   );
 };
 
-const CourseDetail = ({navigation}:any) => {
-  const { user } = useAuthStore();
+const CourseDetail = ({ navigation }: any) => {
+  const { user, educator, updateUser } = useAuthStore();
   const { courseId } = useLocalSearchParams<{ courseId: string }>();
   const [selectedSegment, setSelectedSegment] = useState<"module" | "reviews">(
     "module"
   );
+
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
-  
+  const enrollCourse = async () => {
+    const { user, updateUser } = useAuthStore.getState();
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/users/enroll`,
+        { userId: user?.id, courseId: courseId }
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // }
+      );
+
+      if (response.status === 200) {
+        // Update the user's enrolls in the store
+        updateUser({
+          enrolls: [...(user?.enrolls || []), courseId],
+        });
+        Toast.show({
+          type: "success",
+          text1: "Course enrolled successfully",
+        });
+        console.log("Course enrolled successfully:", response.data);
+      }
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong",
+      });
+      console.error("Error enrolling course:", error);
+    }
+  };
+  const unrollCourse = async () => {
+    const { user, updateUser } = useAuthStore.getState();
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/users/unroll`,
+        { userId: user?.id, courseId: courseId }
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // }
+      );
+
+      if (response.status === 200) {
+        // Remove the course from the user's enrolls
+        updateUser({
+          enrolls: user?.enrolls?.filter((id) => id !== courseId), // Filter out the courseId
+        });
+        console.log("Course unrolled successfully:", response.data);
+        Toast.show({
+          type: "success",
+          text1: "Course unrolled successfully!",
+        });
+      }
+    } catch (error) {
+      console.error("Error unrolling course:", error);
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong",
+      });
+    }
+  };
+
   const fetchPaymentIntentClientSecret = async (amount: number) => {
     try {
       // Call your backend to create a PaymentIntent
@@ -133,7 +200,6 @@ const CourseDetail = ({navigation}:any) => {
     }
   };
   const handlePayment = async (amount: number) => {
-    console.log("Payment");
     setLoading(true);
 
     try {
@@ -150,30 +216,12 @@ const CourseDetail = ({navigation}:any) => {
         if (initError) {
           console.error(initError);
           setLoading(false);
-          return;
         }
 
         // Present the Payment Sheet
         const { error: paymentError } = await presentPaymentSheet();
-
-        if (paymentError) {
-          console.error(paymentError);
-          Toast.show({
-            type: "error",
-            text1: "Payment Failed!",
-          });
-        } else {
-          Toast.show({
-            type: "success",
-            text1: "Payment Successful",
-            text2: "let's go....!",
-          });
-          console.log("Payment completed successfully");
-          //to-do
-        }
-      } else {
-        //to-do
       }
+      await enrollCourse();
     } catch (error) {
       console.error("Payment failed", error);
     }
@@ -196,7 +244,7 @@ const CourseDetail = ({navigation}:any) => {
     queryFn: () => fetchCourseModules(courseId || ""),
     enabled: !!courseId,
   });
-  
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -220,11 +268,21 @@ const CourseDetail = ({navigation}:any) => {
         </View>
 
         {/* Course Title */}
-        <Text className=" text-3xl">{data?.title}</Text>
-        <Text className=" text-gray-700 text-base">{data?.description}</Text>
+        <Text style={{ fontFamily: "Font" }} className=" text-3xl">
+          {data?.title}
+        </Text>
+        <Text
+          style={{ fontFamily: "Font" }}
+          className=" text-gray-700 my-4 text-pretty text-base"
+        >
+          {data?.description}
+        </Text>
 
         {/* Course Price */}
-        <Text className="text-5xl text-gray-700 mt-8 font-bold text-center">
+        <Text
+          style={{ fontFamily: "Font" }}
+          className="text-5xl text-gray-700 mt-8 font-bold text-center"
+        >
           {data?.price ? "$" + data?.price : "FREE"}
         </Text>
 
@@ -255,32 +313,40 @@ const CourseDetail = ({navigation}:any) => {
           </View>
         )}
       </View>
-
-      <TouchableOpacity
-        onPress={() =>
-          router.push({
-            pathname: "/(module)/create-module",
-            params: { courseId: courseId },
-          })
-        }
-        className="bg-blue-500 absolute top-2 right-2 m-2 p-2 h-12 w-12 flex justify-center items-center rounded-xl"
-      >
-        <MaterialIcons name="playlist-add" size={30} color="#FFFFFF" />
-      </TouchableOpacity>
+      {user?.userType === "educator" && data?.educator === educator?._id && (
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/(module)/create-module",
+              params: { courseId: courseId },
+            })
+          }
+          className=" absolute top-2 right-2 m-2 p-2 h-12 w-12 flex justify-center items-center rounded-xl"
+        >
+          <MaterialIcons name="playlist-add" size={30} color="#1E90FF" />
+        </TouchableOpacity>
+      )}
 
       <Animated.View
         entering={FadeInDown.duration(300).delay(600).springify()}
         className="w-full flex justify-center items-center mb-8"
       >
         {user?.enrolls?.includes(courseId) ? (
-          ""
+          <Pressable
+            className="bg-red-400 fixed bottom p-2 px-4 mb-10 rounded-2xl w-full flex justify-center items-center"
+            onPress={unrollCourse}
+          >
+            <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
+              {loading ? "Wait a minute" : "Unroll from Course"}
+            </Text>
+          </Pressable>
         ) : (
           <Pressable
-            className="bg-blue-500 fixed bottom p-2 px-4 rounded-2xl w-full flex justify-center items-center"
+            className="bg-blue-500 fixed bottom p-2 px-4 mb-10 rounded-2xl w-full flex justify-center items-center"
             onPress={() => handlePayment(data?.price ? 200 : 200)}
           >
             <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
-              {loading ? "Wait a minute" : "Enroll now"}
+              {loading ? "Wait a minute" : "Enroll Now"}
             </Text>
           </Pressable>
         )}

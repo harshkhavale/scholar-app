@@ -66,6 +66,7 @@ export default function EducatorsScreen() {
             source={{ uri: `${BASE_URL}/uploads/educators/${item.background_image}` }}
             className="h-full w-full"
             resizeMode="cover"
+            alt="@/assets/images/placeholder.png"
           />
         ) : (
           <Text className="text-gray-500 text-center pt-12">No Image</Text>
@@ -77,9 +78,10 @@ export default function EducatorsScreen() {
         source={
           item.profile_image
             ? { uri: `${BASE_URL}/uploads/educators/${item.profile_image}` }
-            : require("@/assets/images/placeholder.png") // Fallback profile image
+            : require("@/assets/images/placeholder1.png") // Fallback profile image
         }
-        className="h-20 w-20 rounded-full border-2 border-white absolute top-16 left-4"
+        
+        className="h-20 w-20 rounded-full object-cover border-2 border-orange-400 bg-orange-400 absolute top-16 left-4"
       />
 
       {/* Educator Info */}
@@ -100,7 +102,7 @@ export default function EducatorsScreen() {
   );
 
   return (
-    <View className="flex-1 bg-gray-100 mt-6">
+    <View className="flex-1 bg-gray-100 mt-12">
       {/* Search Bar */}
       <View className="px-4 pb-8">
         <View className="flex-row items-center bg-white p-3 rounded-2xl shadow-md">
