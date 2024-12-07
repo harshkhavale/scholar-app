@@ -84,3 +84,21 @@ export interface Auth {
   educator?:Educator;
   message?: string | null;
 }
+export interface Review {
+  _id: string;
+  courseId: string;
+  userId: {
+    _id: string;
+    profilePic: string | null;
+    fullName: string;
+  };
+  reviewText: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface Reviews {
+  data: Review[];
+  total: number;
+}

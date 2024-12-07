@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  Image
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -14,7 +15,6 @@ import { Course } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { BASE_URL } from "@/utils/endpoints";
 import { router } from "expo-router";
-import { Image } from "expo-image";
 
 export default function EducatorProfile() {
   const user = useAuthStore((state) => state.user);
@@ -98,7 +98,8 @@ export default function EducatorProfile() {
     try {
       setLoading(true);
       const formData = new FormData();
-
+  
+      // Profile Image
       if (profilePic && profilePic !== userData.profile_image) {
         const fileName = profilePic.split("/").pop();
         const type = `image/${fileName?.split(".").pop()}`;
@@ -108,47 +109,58 @@ export default function EducatorProfile() {
           type,
         } as any);
       }
-      if (bannerPic && bannerPic !== userData.banner_image) {
+  
+      // Banner Image (Educators only)
+      if (user?.userType === "educator" && bannerPic && bannerPic !== userData.banner_image) {
         const fileName = bannerPic.split("/").pop();
         const type = `image/${fileName?.split(".").pop()}`;
-        formData.append("banner_image", {
+        formData.append("background_image", {
           uri: bannerPic,
           name: fileName,
           type,
         } as any);
       }
-
-      // Append other educator data
-      formData.append("description", userData.description);
-      formData.append("contact_email", userData.contact_email);
-      formData.append(
-        "qualifications",
-        JSON.stringify(userData.qualifications)
-      );
-      formData.append("social_links", JSON.stringify(userData.social_links));
-      formData.append("specialties", JSON.stringify(userData.specialties));
-
-      const response = await axios.put(
-        `${BASE_URL}/api/educators/${user?._id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
+  
+      // Add common fields
+      formData.append("fullName", userData.fullName);
+      formData.append("email", userData.email);
+  
+      // Password (if changed)
+      if (userData.password) {
+        formData.append("password", userData.password);
+      }
+  
+      // Educator-specific fields
+      if (user?.userType === "educator") {
+        formData.append("description", userData.description);
+        formData.append("contact_email", userData.contact_email);
+        formData.append("qualifications", JSON.stringify(userData.qualifications));
+        formData.append("social_links", JSON.stringify(userData.social_links));
+        formData.append("specialties", JSON.stringify(userData.specialties));
+      }
+  
+      // API Endpoint based on userType
+      const endpoint =
+        user?.userType === "educator"
+          ? `${BASE_URL}/api/educators/user/${user.id}`
+          : `${BASE_URL}/api/users/${user?.id}`;
+  
+      const response = await axios.put(endpoint, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
       if (response.status === 200) {
-        alert("Educator profile updated successfully!");
         setUserData(response.data);
       }
     } catch (error) {
-      console.error("Error updating educator profile:", error);
-      alert("Failed to update educator profile.");
+      console.error("Error updating profile:", error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   if (!userData) {
     return (
@@ -171,7 +183,7 @@ export default function EducatorProfile() {
     />
   ) : (
     <Image
-      source={require("@/assets/images/placeholder1.png")}
+      source={require("@/assets/images/placeholder.png")}
       style={{ width: "100%", height: 54, marginTop:54, marginLeft:150 }}
       resizeMode="contain"
     />
@@ -199,17 +211,16 @@ export default function EducatorProfile() {
           >
             <TouchableOpacity onPress={handleImagePicker}>
               <Image
-                source={profilePic || require("@/assets/images/placeholder1.png")}
+                source={profilePic || require("@/assets/images/placeholder.png")}
                 style={{
                   width: 140, // w-40 in Tailwind
                   height: 140, // h-40 in Tailwind
-                  borderRadius: 8, // rounded-lg in Tailwind
-                  borderWidth: 4, // border-4 in Tailwind
-                  borderColor: "orange", // border-orange-500 in Tailwind
+                  backgroundColor:"white",
+                  borderColor:"gray",
+                  borderRadius: 20,
                 }}
                 alt="@/assets/images/upload.png"
-                contentFit="cover"
-                placeholder={"@/assets/images/upload.png"}
+                className="bg-white shadow-lg"
               />
             </TouchableOpacity>
           </View>
@@ -236,7 +247,7 @@ export default function EducatorProfile() {
             </Text>
             <TextInput
               style={{ fontFamily: "Font" }}
-              value={userData.contact_email || ""}
+              value={userData.contact_email ||userData.email || ""}
               onChangeText={(text) =>
                 setUserData((prev: any) => ({
                   ...prev,
@@ -395,7 +406,7 @@ export default function EducatorProfile() {
         <View className="mt-6">
           <Text
             style={{ fontFamily: "Font" }}
-            className="text-gray-800 text-xl font-bold mb-4 px-4"
+            className="text-gray-800 text-xl mb-4 px-4"
           >
             Enrolled Courses
           </Text>
@@ -427,14 +438,13 @@ export default function EducatorProfile() {
                     </Text>
                   </View>
                   <View>
-                    <Image
-                        source={{
-                          uri: `${BASE_URL}/uploads/thumbnails/${course.thumbnail}`,
-                        }}
-                      placeholder={"@assets/images/thumbnail1.png"}
-                      className="w-20 h-24"
-                      resizeMode="cover"
-                    />
+                  <Image
+          source={{
+            uri: `${BASE_URL}/uploads/thumbnails/${course?.thumbnail}`,
+          }}
+          className="h-24 w-24 object-cover"
+          resizeMode="cover"
+        />
                   </View>
                 </View>
               </TouchableOpacity>

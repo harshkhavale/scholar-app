@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Course, Modules } from "@/types/types";
+import { Course, Modules, Reviews } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -21,6 +21,7 @@ import Toast from "react-native-toast-message";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useAuthStore } from "@/store/auth-store";
+import ReviewList from "@/components/ReviewList";
 
 // Fetch course, modules, and reviews data
 const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
@@ -46,7 +47,17 @@ const fetchCourseModules = async (courseId?: string): Promise<Modules> => {
     throw error;
   }
 };
-
+const fetchCourseReviews = async (courseId?: string): Promise<Reviews> => {
+  try {
+    const response = await axios.get<Reviews>(
+      `${BASE_URL}/api/reviews/${courseId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching modules:", error);
+    throw error;
+  }
+};
 // Segmented control component for "Module" and "Reviews"
 const SegmentedControl: React.FC<{
   selectedSegment: "module" | "reviews";
@@ -244,6 +255,16 @@ const CourseDetail = ({ navigation }: any) => {
     queryFn: () => fetchCourseModules(courseId || ""),
     enabled: !!courseId,
   });
+  const {
+    data: reviewsData,
+    error: reviewsError,
+    isLoading: reviewsIsLoading,
+    refetch: reviewsRefetch,
+  } = useQuery<Reviews>({
+    queryKey: ["course-reviews", courseId],
+    queryFn: () => fetchCourseReviews(courseId || ""),
+    enabled: !!courseId,
+  });
 
   return (
     <ParallaxScrollView
@@ -261,7 +282,7 @@ const CourseDetail = ({ navigation }: any) => {
         {/* Language Badge */}
         <View className=" flex-row gap-2 items-center">
           {data?.languages?.map((language, index) => (
-            <Text className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min">
+            <Text key={index} className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min">
               {language}
             </Text>
           ))}
@@ -303,13 +324,11 @@ const CourseDetail = ({ navigation }: any) => {
           </View>
         ) : (
           <View className="mt-6">
-            <Text className="font-semibold text-lg">Reviews</Text>
-            {/* Map through reviews if available */}
-            {/* {data?.reviews?.map((review, index) => (
-              <Text key={index} className="text-xl mt-2">
-                {review}
-              </Text>
-            ))} */}
+            <ReviewList
+              onLoadMore={reviewsRefetch}
+              ReviewsData={reviewsData}
+              isLoading={reviewsIsLoading}
+            />
           </View>
         )}
       </View>

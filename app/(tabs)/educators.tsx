@@ -78,10 +78,10 @@ export default function EducatorsScreen() {
         source={
           item.profile_image
             ? { uri: `${BASE_URL}/uploads/educators/${item.profile_image}` }
-            : require("@/assets/images/placeholder1.png") // Fallback profile image
+            : require("@/assets/images/placeholder.png") // Fallback profile image
         }
         
-        className="h-20 w-20 rounded-full object-cover border-2 border-orange-400 bg-orange-400 absolute top-16 left-4"
+        className="h-20 w-20 rounded-full object-cover border-2 border-gray-300 bg-white absolute top-16 left-4"
       />
 
       {/* Educator Info */}
