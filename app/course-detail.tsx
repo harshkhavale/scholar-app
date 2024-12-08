@@ -22,6 +22,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useAuthStore } from "@/store/auth-store";
 import ReviewList from "@/components/ReviewList";
+import Feather from "@expo/vector-icons/Feather";
 
 // Fetch course, modules, and reviews data
 const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
@@ -280,12 +281,30 @@ const CourseDetail = ({ navigation }: any) => {
     >
       <View className="">
         {/* Language Badge */}
-        <View className=" flex-row gap-2 items-center">
+        <View className=" flex-row justify-between items-center mb-4">
           {data?.languages?.map((language, index) => (
-            <Text key={index} className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min">
+            <Text
+              key={index}
+              className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min text-center"
+            >
               {language}
             </Text>
           ))}
+          {user?.enrolls?.includes(courseId) && (
+            <Pressable
+              className="rounded-2xl flex-row p-2  flex justify-center items-center border-2 border-orange-600"
+              onPress={()=>{
+                router.push({pathname:"/modules",params:{"courseId":courseId}})
+              }}
+            ><Feather name="arrow-up-right" size={24} color="orange" />
+              <Text
+                className="text-orange-500"
+                style={{ fontFamily: "Font" }}
+              >
+                Continue Learnings
+              </Text>
+            </Pressable>
+          )}
         </View>
 
         {/* Course Title */}

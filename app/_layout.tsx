@@ -67,6 +67,10 @@ export default function RootLayout() {
               options={{ headerShown: true, title: "" }}
             />
             <Stack.Screen
+              name="modules"
+              options={{ headerShown: true, title: "" }}
+            />
+            <Stack.Screen
               name="module-detail"
               options={{ headerShown: true, title: "" }}
             />

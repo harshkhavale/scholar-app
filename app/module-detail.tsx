@@ -5,10 +5,7 @@ import { useVideoPlayer } from "expo-video";
 import { useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import * as Print from "expo-print";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
-import { WebView } from "react-native-webview";  // WebView to render PDFs
+
 import { BASE_URL } from "@/utils/endpoints";
 import VideoScreen from "@/components/VideoScreen";
 
