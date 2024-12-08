@@ -188,6 +188,8 @@ export default function EducatorProfile() {
       resizeMode="contain"
     />
   )}
+
+
 </TouchableOpacity>
 
           </View>
@@ -211,16 +213,13 @@ export default function EducatorProfile() {
           >
             <TouchableOpacity onPress={handleImagePicker}>
               <Image
-                source={profilePic || require("@/assets/images/placeholder.png")}
+                source={profilePic || require("@/assets/user.png")}
                 style={{
                   width: 140, // w-40 in Tailwind
                   height: 140, // h-40 in Tailwind
-                  backgroundColor:"white",
-                  borderColor:"gray",
-                  borderRadius: 20,
                 }}
-                alt="@/assets/images/upload.png"
-                className="bg-white shadow-lg"
+                alt="@/assets/user.png"
+                className="bg-orange-500 border-2 border-orange-100 rounded-2xl"
               />
             </TouchableOpacity>
           </View>
@@ -421,7 +420,7 @@ export default function EducatorProfile() {
                   })
                 }
               >
-                <View className=" flex-row items-center overflow-hidden relative bg-white mx-8 rounded-lg shadow-md mb-4 border-l-4 border-green-500">
+                <View className=" flex-row items-center overflow-hidden relative bg-white mx-8 rounded-lg shadow-md mb-4 border-l-8 border-green-500">
                   <View className="flex-1 px-4">
                     {" "}
                     <Text

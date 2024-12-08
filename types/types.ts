@@ -5,7 +5,7 @@ export interface Course {
   title: string;
   description: string;
   thumbnail: string;
-  educator: string | null;
+  educator: Educator | null;
   price: string | null;
 
   modules: Module[] | null;

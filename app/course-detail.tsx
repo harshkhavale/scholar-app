@@ -267,6 +267,13 @@ const CourseDetail = ({ navigation }: any) => {
     enabled: !!courseId,
   });
 
+  const continueLearning = () => {
+    console.log("Clicked Continue Learning");
+    router.push({
+      pathname: "/(module)/modules",
+      params: { courseId: courseId },
+    });
+  };
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -282,25 +289,23 @@ const CourseDetail = ({ navigation }: any) => {
       <View className="">
         {/* Language Badge */}
         <View className=" flex-row justify-between items-center mb-4">
-          {data?.languages?.map((language, index) => (
-            <Text
-              key={index}
-              className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min text-center"
-            >
-              {language}
-            </Text>
-          ))}
+          <View className=" flex-row gap-2 items-center justify-center">
+            {data?.languages?.map((language, index) => (
+              <Text
+                key={index}
+                className="text-white bg-green-500 rounded-full p-2 text-xs mb-4 w-min text-center"
+              >
+                {language}
+              </Text>
+            ))}
+          </View>
           {user?.enrolls?.includes(courseId) && (
             <Pressable
               className="rounded-2xl flex-row p-2  flex justify-center items-center border-2 border-orange-600"
-              onPress={()=>{
-                router.push({pathname:"/modules",params:{"courseId":courseId}})
-              }}
-            ><Feather name="arrow-up-right" size={24} color="orange" />
-              <Text
-                className="text-orange-500"
-                style={{ fontFamily: "Font" }}
-              >
+              onPress={continueLearning}
+            >
+              <Feather name="arrow-up-right" size={24} color="orange" />
+              <Text className="text-orange-500" style={{ fontFamily: "Font" }}>
                 Continue Learnings
               </Text>
             </Pressable>
@@ -317,13 +322,34 @@ const CourseDetail = ({ navigation }: any) => {
         >
           {data?.description}
         </Text>
+        <Pressable onPress={()=>router.push({ pathname:"/educator-detail",params:data?.educator?._id})} className=" p-2 bg-gray-100 rounded-2xl flex-row gap-2 items-center border-l-8 border-b-8 border-gray-300">
+          <View>
+            <Image
+              className="w-10 h-10 rounded-full "
+              source={
+                data?.educator?.profile_image || require("@/assets/user.png")
+              }
+            />
+          </View>
+          <View className=" flex-col">
+            <Text style={{ fontFamily: "Font" }} className=" text-xs">
+              Created by
+            </Text>
 
+            <Text style={{ fontFamily: "Font" }}>
+              {data?.educator?.fullName}
+            </Text>
+            <Text style={{ fontFamily: "Font" }} className=" text-xs">
+              {data?.educator?.description}
+            </Text>
+          </View>
+        </Pressable>
         {/* Course Price */}
         <Text
           style={{ fontFamily: "Font" }}
-          className="text-5xl text-gray-700 mt-8 font-bold text-center"
+          className="text-5xl text-gray-700 mt-8 text-center"
         >
-          {data?.price ? "$" + data?.price : "FREE"}
+          {data?.price ? "₹" + data?.price : "FREE"}
         </Text>
 
         {/* Segmented Control */}
@@ -347,6 +373,7 @@ const CourseDetail = ({ navigation }: any) => {
               onLoadMore={reviewsRefetch}
               ReviewsData={reviewsData}
               isLoading={reviewsIsLoading}
+              courseId={courseId}
             />
           </View>
         )}

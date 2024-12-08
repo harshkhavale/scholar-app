@@ -7,6 +7,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { BASE_URL } from "@/utils/endpoints";
+import { user } from "@/assets";
 
 
 interface EducatorDetailsProps {
@@ -40,13 +41,14 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
     enabled: true,
   });
   return (
-    <ScrollView className="flex-1 bg-gray-100 dark:bg-gray-900">
+    <ScrollView className="flex-1 bg-gray-100 dark:bg-gray-900 pt-20">
       {/* Background Image */}
       {data?.background_image && (
         <Image
           source={{ uri: `${BASE_URL}/uploads/educators/${data.background_image}` }}
           className="h-48 w-full"
           resizeMode="cover"
+          alt={"@assets/user.png"}
         />
       )}
 

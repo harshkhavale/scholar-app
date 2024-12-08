@@ -118,10 +118,10 @@ const CreateCourse = () => {
 
   return (
     <View className="flex-1">
-      <View className="p-6">
+      <View className="">
         
 
-        <ScrollView className="rounded-lg h-[80vh]">
+        <ScrollView className="rounded-lg h-[80vh] p-4">
           {/* Title */}
           <Text style={{ fontFamily: "Font" }} className="text-gray-700 mb-2 text-xs">
             Course Title
@@ -129,7 +129,8 @@ const CreateCourse = () => {
           <TextInput
             style={{ fontFamily: "Font" }}
             value={title}
-            onChangeText={setTitle}
+            focusable
+            onChangeText={(text)=>setTitle(text)}
             className="border border-gray-300 rounded-lg p-3 mb-4 text-xl"
           />
 
@@ -203,7 +204,7 @@ const CreateCourse = () => {
         </ScrollView>
         <TouchableOpacity
             onPress={handleCreateCourse}
-            className={`p-4 rounded-2xl ${
+            className={`p-4 m-4 rounded-2xl ${
               loading ? "bg-gray-500" : "bg-orange-500"
             }`}
             disabled={loading}

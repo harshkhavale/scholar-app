@@ -11,18 +11,12 @@ interface ModuleCardProps {
 const ModuleCard: React.FC<ModuleCardProps> = ({ module }) => {
   return (
     <TouchableOpacity
-      onPress={() =>
-        router.push({
-          pathname: "/module-detail",
-          params: { moduleId: module._id },
-        })
-      }
+    
       className="bg-gray-50 p-4 rounded-lg shadow-sm mb-4"
     >
       {/* Module Title */}\
       <View className="flex-row items-center gap-8">
         <View>
-          {" "}
           <Text
             style={{ fontFamily: "Font" }}
             className="text-base font-semibold text-gray-800"
@@ -35,7 +29,9 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ module }) => {
             {new Date(module?.updatedAt).toLocaleDateString()}
           </Text>
         </View>
-        <View className="">        <AntDesign name="down" size={20} color="black" />
+        <View className="">
+          {" "}
+          <AntDesign name="down" size={20} color="black" />
         </View>
       </View>
     </TouchableOpacity>
