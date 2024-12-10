@@ -41,11 +41,11 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
     enabled: true,
   });
   return (
-    <ScrollView className="flex-1 bg-gray-100 dark:bg-gray-900 pt-20">
+    <ScrollView className="flex-1 bg-gray-100 dark:bg-gray-900 ">
       {/* Background Image */}
       {data?.background_image && (
         <Image
-          source={{ uri: `${BASE_URL}/uploads/educators/${data.background_image}` }}
+          source={{ uri: `${BASE_URL}/uploads/profiles/${data.background_image}` }}
           className="h-48 w-full"
           resizeMode="cover"
           alt={"@assets/user.png"}
@@ -59,7 +59,7 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
           <Image
             source={{
               uri: data?.profile_image
-                ? `${BASE_URL}/uploads/educators/${data.profile_image}`
+                ? `${BASE_URL}/uploads/profiles/${data.profile_image}`
                 : "https://via.placeholder.com/150",
             }}
             className="w-full h-full"
@@ -68,10 +68,10 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
         </View>
 
         {/* Name and Description */}
-        <Text className="text-center text-xl font-semibold text-gray-800 dark:text-gray-100 mt-4">
+        <Text style={{fontFamily:"Font"}} className="text-center text-xl font-semibold text-gray-800 dark:text-gray-100 mt-4">
           {data?.fullName}
         </Text>
-        <Text className="text-center text-gray-600 dark:text-gray-400 text-sm mt-2">
+        <Text style={{fontFamily:"Font"}} className="text-center text-gray-600 dark:text-gray-400 text-sm mt-2">
           {data?.description || "No description available."}
         </Text>
       </View>
@@ -79,10 +79,10 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
       {/* Specialties */}
       {data?.specialties && (
         <View className="px-4 mt-6">
-          <Text className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Specialties</Text>
+          <Text style={{fontFamily:"Font"}} className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Specialties</Text>
           <View className="flex-row flex-wrap gap-2">
             {data?.specialties.map((specialty, index) => (
-              <Text
+              <Text style={{fontFamily:"Font"}}
                 key={index}
                 className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm shadow-md"
               >
@@ -96,13 +96,13 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
       {/* Contact Info */}
       {data?.contact_email && (
         <View className="px-4 mt-6">
-          <Text className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Contact</Text>
+          <Text style={{fontFamily:"Font"}} className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Contact</Text>
           <TouchableOpacity
             onPress={() => openLink(`mailto:${data.contact_email}`)}
             className="flex-row items-center gap-2 bg-gray-200 dark:bg-gray-700 px-4 py-3 rounded-lg"
           >
             <Ionicons name="mail" size={20} color="#FF8C00" />
-            <Text className="text-gray-700 dark:text-gray-300">{data.contact_email}</Text>
+            <Text style={{fontFamily:"Font"}} className="text-gray-700 dark:text-gray-300">{data.contact_email}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -110,7 +110,7 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
       {/* Social Links */}
       {data?.social_links && (
         <View className="px-4 mt-6">
-          <Text className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Social Links</Text>
+          <Text style={{fontFamily:"Font"}} className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Social Links</Text>
           <View className="flex-row gap-4">
             {data?.social_links.linkedin && (
               <TouchableOpacity onPress={() => openLink(data?.social_links?.linkedin || "/")}>
@@ -128,7 +128,7 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
 
       {/* Footer */}
       <View className="mt-8 mb-4 px-4">
-        <Text className="text-center text-sm text-gray-600 dark:text-gray-400">
+        <Text style={{fontFamily:"Font"}} className="text-center text-sm text-gray-600 dark:text-gray-400">
           
           Profile last updated on {new Date(data?.updatedAt).toLocaleDateString()}
         </Text>

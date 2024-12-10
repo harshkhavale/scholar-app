@@ -324,14 +324,17 @@ const CourseDetail = ({ navigation }: any) => {
         </Text>
         <Pressable onPress={()=>router.push({ pathname:"/educator-detail",params:data?.educator?._id})} className=" p-2 bg-gray-100 rounded-2xl flex-row gap-2 items-center border-l-8 border-b-8 border-gray-300">
           <View>
-            <Image
-              className="w-10 h-10 rounded-full "
-              source={
-                data?.educator?.profile_image || require("@/assets/user.png")
-              }
-            />
+          <Image
+  className="w-10 h-10 rounded-full"
+  source={
+    data?.educator?.profile_image 
+      ? { uri: `${BASE_URL}/uploads/profiles/${data.educator.profile_image}` }
+      : require("@/assets/user.png")
+  }
+/>
+
           </View>
-          <View className=" flex-col">
+          <View className=" flex-col overflow-hidden">
             <Text style={{ fontFamily: "Font" }} className=" text-xs">
               Created by
             </Text>
@@ -339,7 +342,7 @@ const CourseDetail = ({ navigation }: any) => {
             <Text style={{ fontFamily: "Font" }}>
               {data?.educator?.fullName}
             </Text>
-            <Text style={{ fontFamily: "Font" }} className=" text-xs">
+            <Text style={{ fontFamily: "Font" }} className=" text-xs h-9 w-72 truncate">
               {data?.educator?.description}
             </Text>
           </View>

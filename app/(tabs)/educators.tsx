@@ -63,7 +63,7 @@ export default function EducatorsScreen() {
       <View className="h-28 w-full rounded-t-xl overflow-hidden bg-gray-200">
         {item.background_image ? (
           <Image
-            source={{ uri: `${BASE_URL}/uploads/educators/${item.background_image}` }}
+            source={{ uri: `${BASE_URL}/uploads/profiles/${item.background_image}` }}
             className="h-full w-full"
             resizeMode="cover"
             alt="@/assets/images/placeholder.png"
@@ -77,7 +77,7 @@ export default function EducatorsScreen() {
       <Image
         source={
           item.profile_image
-            ? { uri: `${BASE_URL}/uploads/educators/${item.profile_image}` }
+            ? { uri: `${BASE_URL}/uploads/profiles/${item.profile_image}` }
             : require("@/assets/images/placeholder.png") // Fallback profile image
         }
         
