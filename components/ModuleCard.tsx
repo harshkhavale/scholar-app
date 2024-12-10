@@ -25,12 +25,12 @@ const ModuleCard: React.FC<ModuleCardProps> = ({ module }) => {
           </Text>
           {/* Module Description */}
           <Text className="text-xs" style={{ fontFamily: "Font" }}>
-            course last updated on{" "}
+            course last updated on 
             {new Date(module?.updatedAt).toLocaleDateString()}
           </Text>
         </View>
         <View className="">
-          {" "}
+           
           <AntDesign name="down" size={20} color="black" />
         </View>
       </View>

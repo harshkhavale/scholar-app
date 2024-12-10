@@ -90,7 +90,7 @@ export default function CoursesScreen() {
           {/* Rating */}
           <View className="flex-row items-center">
             <Ionicons name="star" size={18} color="#FFD700" />
-            <Text className="ml-1 text-sm text-gray-600">4.5</Text>{" "}
+            <Text className="ml-1 text-sm text-gray-600">4.5</Text> 
             {/* Update rating dynamically */}
           </View>
         </View>

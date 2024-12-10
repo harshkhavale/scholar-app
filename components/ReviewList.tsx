@@ -43,7 +43,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
               placeholder="comment here..."
               
               className="border-2 border-gray-200 w-full h-40 rounded-2xl text-xl p-4"
-            />{" "}
+            /> 
             <Pressable className=" py-4 w-min">
               <Text
                 style={{ fontFamily: "Font" }}

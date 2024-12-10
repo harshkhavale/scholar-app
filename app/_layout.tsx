@@ -84,6 +84,10 @@ export default function RootLayout() {
               name="(auth)/login"
               options={{ headerShown: false }}
             />
+             <Stack.Screen
+              name="analytics"
+              options={{ headerShown: true,title: "Analytics - December"  }}
+            />
             <Stack.Screen name="role" options={{ headerShown: false }} />
             <Stack.Screen
               name="(course)/create-course"

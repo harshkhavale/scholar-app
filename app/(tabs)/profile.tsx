@@ -55,7 +55,9 @@ export default function EducatorProfile() {
             `${BASE_URL}/api/educators/user/${user?.id}`
           );
           setUserData(response.data);
-          
+          // setProfilePic(`${BASE_URL}/uploads/profiles/${user?.profile_image}`)
+          // setBannerPic(`${BASE_URL}/uploads/profiles/${user?.banner_image}`)
+
         } else {
           const response = await axios.get(`${BASE_URL}/api/users/${user?.id}`);
           setUserData(response.data);
@@ -400,7 +402,7 @@ export default function EducatorProfile() {
             )}
           </TouchableOpacity>
         </View>
-      </View>{" "}
+      </View> 
       {user?.userType === "student" && (
         <View className="mt-6">
           <Text
@@ -422,7 +424,7 @@ export default function EducatorProfile() {
               >
                 <View className=" flex-row items-center overflow-hidden relative bg-white mx-8 rounded-lg shadow-md mb-4 border-l-8 border-green-500">
                   <View className="flex-1 px-4">
-                    {" "}
+                     
                     <Text
                       style={{ fontFamily: "Font" }}
                       className="text-gray-900 font-semibold text-lg"

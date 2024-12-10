@@ -126,13 +126,30 @@ export default function HomeScreen() {
               style={{ fontFamily: "Font" }}
             >
               {user?.fullName}
-            </Text>
+            </Text> 
+            <View>
+              {user?.userType === "educator" && (
+                <Pressable
+                  onPress={() => router.push("/analytics")}
+                  className="p-2 flex-row gap-2 border-2 border-white rounded-lg justify-center mt-2"
+                >
+                  <Text
+                    className="text-white"
+                    style={{ fontFamily: "Font" }}
+                  >
+                    Analytics
+                  </Text>
+                  <Ionicons name="analytics" size={24} color="white" />
+                </Pressable>
+              )}
+            </View>
           </View>
+
           <View>
             <View>
               {/* Dropdown Trigger */}
               <Pressable onPress={() => setShowDropdown(!showDropdown)}>
-                <Ionicons name="menu-sharp" size={30} color="white" />
+                <Ionicons name={`${showDropdown ? "close" :"menu-sharp"}`} size={30} color="white" />
               </Pressable>
 
               {/* Dropdown Menu */}
@@ -140,7 +157,7 @@ export default function HomeScreen() {
                 <TouchableWithoutFeedback
                   onPress={() => setShowDropdown(false)}
                 >
-                  <View className="absolute w-40 right-0 mt-2 bg-white rounded-md shadow-lg z-10">
+                  <View className="absolute w-40 right-0 mt-10 bg-white rounded-md shadow-lg z-50">
                     <Pressable
                       onPress={() => {
                         setShowDropdown(false);
@@ -163,7 +180,7 @@ export default function HomeScreen() {
           </View>
         </Animated.View>
         <Pressable onPress={() => router.push("/explore")}>
-          <View className="flex-row items-center bg-white/20 rounded-2xl p-4 mt-4">
+          <View className="flex-row items-center bg-white/20 rounded-2xl p-4 mt-4 z-10">
             <MaterialCommunityIcons name="magnify" size={20} color={"white"} />
             <Text style={{ fontFamily: "Font" }} className="text-white ml-2">
               What do you want to learn?
