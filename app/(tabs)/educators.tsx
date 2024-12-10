@@ -24,7 +24,11 @@ export default function EducatorsScreen() {
   useEffect(() => {
     const fetchEducators = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/educators`);
+        const response = await axios.get(`${BASE_URL}/api/educators`,{
+          headers:{
+            "Cache-Control": "no-cache",
+          }
+        });
         setEducators(response.data);
         setFilteredEducators(response.data);
       } catch (error) {

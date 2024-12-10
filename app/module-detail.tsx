@@ -20,7 +20,11 @@ interface Module {
 
 // Fetch module data by moduleId
 const fetchModule = async (moduleId: string): Promise<Module> => {
-  const response = await axios.get<Module>(`${BASE_URL}/api/modules/${moduleId}`);
+  const response = await axios.get<Module>(`${BASE_URL}/api/modules/${moduleId}`,{
+    headers: {
+      "Cache-Control": "no-cache",
+    },
+  });
   return response.data;
 };
 

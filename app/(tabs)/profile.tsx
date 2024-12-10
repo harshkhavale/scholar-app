@@ -27,7 +27,11 @@ export default function EducatorProfile() {
   const fetchCourses = async (): Promise<Course[]> => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/users/${user?.id}/enrolls`
+        `${BASE_URL}/api/users/${user?.id}/enrolls`,{
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        }
         //   , {
         //   params: { search: searchTerm },
         //   headers: {
@@ -52,14 +56,22 @@ export default function EducatorProfile() {
         console.log(user);
         if (user?.userType === "educator") {
           const response = await axios.get(
-            `${BASE_URL}/api/educators/user/${user?.id}`
+            `${BASE_URL}/api/educators/user/${user?.id}`,{
+              headers: {
+                "Cache-Control": "no-cache",
+              },
+            }
           );
           setUserData(response.data);
           // setProfilePic(`${BASE_URL}/uploads/profiles/${user?.profile_image}`)
           // setBannerPic(`${BASE_URL}/uploads/profiles/${user?.banner_image}`)
 
         } else {
-          const response = await axios.get(`${BASE_URL}/api/users/${user?.id}`);
+          const response = await axios.get(`${BASE_URL}/api/users/${user?.id}`,{
+            headers: {
+              "Cache-Control": "no-cache",
+            },
+          });
           setUserData(response.data);
          
           
@@ -150,7 +162,9 @@ export default function EducatorProfile() {
       const response = await axios.put(endpoint, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache"
         },
+        
       });
   
       if (response.status === 200) {

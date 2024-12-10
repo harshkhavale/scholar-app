@@ -30,7 +30,11 @@ const ModulesScreen = () => {
   // Fetch all modules for the course
   const fetchCourseModules = async (courseId?: string): Promise<Modules> => {
     const response = await axios.get<Modules>(
-      `${BASE_URL}/api/courses/${courseId}/modules`
+      `${BASE_URL}/api/courses/${courseId}/modules`,{
+        headers:{
+          "Cache-Control":"no-cache"
+        }
+      }
     );
     return response.data;
   };
@@ -38,7 +42,11 @@ const ModulesScreen = () => {
   // Fetch details for a single module
   const fetchModuleDetails = async (moduleId: string): Promise<Module> => {
     const response = await axios.get<Module>(
-      `${BASE_URL}/api/modules/${moduleId}`
+      `${BASE_URL}/api/modules/${moduleId}`,{
+        headers:{
+          "Cache-Control":"no-cache"
+        }
+      }
     );
     return response.data;
   };

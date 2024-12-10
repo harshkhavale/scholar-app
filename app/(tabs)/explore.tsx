@@ -28,7 +28,11 @@ export default function CoursesScreen() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/courses`);
+        const response = await axios.get(`${BASE_URL}/api/courses`,{
+          headers:{
+            "Cache-Control":"no-cache"
+          }
+        });
         setCourses(response.data);
         setFilteredCourses(response.data);
       } catch (error) {
@@ -125,7 +129,7 @@ export default function CoursesScreen() {
           <View className="flex-row items-center gap-2">
             {/* Add Folder Button */}
             <Pressable
-              onPress={() => router.push("/(course)/create-course")}
+              onPress={() => router.push("/add-course")}
               className="bg-orange-500 p-3 rounded-2xl shadow-lg"
             >
               <AntDesign name="addfolder" size={24} color="#FFFFFF" />

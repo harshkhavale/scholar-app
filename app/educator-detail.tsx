@@ -28,7 +28,11 @@ const EducatorDetails: React.FC<EducatorDetailsProps> = () => {
   const fetchEducatorDetail = async (): Promise<Educator> => {
     try {
       const response = await axios.get<Educator>(
-        `${BASE_URL}/api/educators/${educatorId}`
+        `${BASE_URL}/api/educators/${educatorId}`,{
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        }
       );
       return response.data;
     } catch (error) {

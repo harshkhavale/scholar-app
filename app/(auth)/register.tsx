@@ -85,6 +85,10 @@ const Register = () => {
           password,
           userType,
           plan: plan || "free", // Default plan to "free" if not provided
+        },{
+          headers:{
+            "Cache-Control": "no-cache",
+          }
         }
       );
   

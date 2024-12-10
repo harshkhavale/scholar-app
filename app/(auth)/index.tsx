@@ -53,6 +53,10 @@ const PricingScreen = () => {
         `${BASE_URL}/api/payments/create-payment-intent`,
         {
           amount: amount, // Amount in cents
+        },{
+          headers: {
+            "Cache-Control": "no-cache",
+          },
         }
       );
 

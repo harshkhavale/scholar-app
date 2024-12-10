@@ -43,7 +43,11 @@ const topics: Topic[] = [
 const fetchCourses = async (searchTerm?: string): Promise<Course[]> => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/api/courses`
+      `${BASE_URL}/api/courses`,{
+        headers:{
+          "Cache-Control":"no-cache",
+        }
+      }
       //   , {
       //   params: { search: searchTerm },
       //   headers: {
@@ -157,7 +161,7 @@ export default function HomeScreen() {
                 <TouchableWithoutFeedback
                   onPress={() => setShowDropdown(false)}
                 >
-                  <View className="absolute w-40 right-0 mt-10 bg-white rounded-md shadow-lg z-50">
+                  <View className="absolute w-40 right-10 mt-2 bg-white rounded-md shadow-lg z-50">
                     <Pressable
                       onPress={() => {
                         setShowDropdown(false);

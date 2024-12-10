@@ -88,9 +88,10 @@ export default function RootLayout() {
               name="analytics"
               options={{ headerShown: true,title: "Analytics - December"  }}
             />
+             
             <Stack.Screen name="role" options={{ headerShown: false }} />
             <Stack.Screen
-              name="(course)/create-course"
+              name="create-course"
               options={{
                 headerShown: true,
                 title: "Create a New Course",
@@ -100,17 +101,7 @@ export default function RootLayout() {
                 },
               }}
             />
-            <Stack.Screen
-              name="(module)/create-module"
-              options={{
-                headerShown: false,
-                title: "Create a New Module",
-                headerTitleStyle: {
-                  fontFamily: "Font",
-                  fontWeight: "semibold", // Set your custom font here
-                },
-              }}
-            />
+           
             <Stack.Screen name="+not-found" />
           </Stack>
         </ThemeProvider>

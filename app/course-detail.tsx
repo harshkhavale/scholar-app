@@ -28,7 +28,12 @@ import Feather from "@expo/vector-icons/Feather";
 const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
   try {
     const response = await axios.get<Course>(
-      `${BASE_URL}/api/courses/${courseId}`
+      `${BASE_URL}/api/courses/${courseId}`, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      }
+      
     );
     return response.data;
   } catch (error) {
@@ -40,7 +45,11 @@ const fetchCourseDetail = async (courseId?: string): Promise<Course> => {
 const fetchCourseModules = async (courseId?: string): Promise<Modules> => {
   try {
     const response = await axios.get<Modules>(
-      `${BASE_URL}/api/courses/${courseId}/modules`
+      `${BASE_URL}/api/courses/${courseId}/modules`,{
+      headers: {
+        "Cache-Control": "no-cache",
+      },
+    }
     );
     return response.data;
   } catch (error) {
@@ -51,7 +60,11 @@ const fetchCourseModules = async (courseId?: string): Promise<Modules> => {
 const fetchCourseReviews = async (courseId?: string): Promise<Reviews> => {
   try {
     const response = await axios.get<Reviews>(
-      `${BASE_URL}/api/reviews/${courseId}`
+      `${BASE_URL}/api/reviews/${courseId}`,{
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -124,7 +137,11 @@ const CourseDetail = ({ navigation }: any) => {
     try {
       const response = await axios.post(
         `${BASE_URL}/api/users/enroll`,
-        { userId: user?.id, courseId: courseId }
+        { userId: user?.id, courseId: courseId },{
+          headers: {
+            "Cache-Control": "no-cache"
+          },
+        }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,
@@ -157,7 +174,11 @@ const CourseDetail = ({ navigation }: any) => {
     try {
       const response = await axios.post(
         `${BASE_URL}/api/users/unroll`,
-        { userId: user?.id, courseId: courseId }
+        { userId: user?.id, courseId: courseId },{
+          headers: {
+            "Cache-Control": "no-cache"
+          },
+        }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,
@@ -286,7 +307,7 @@ const CourseDetail = ({ navigation }: any) => {
         />
       }
     >
-      <View className="">
+      <View className=" mb-6">
         {/* Language Badge */}
         <View className=" flex-row justify-between items-center mb-4">
           <View className=" flex-row gap-2 items-center justify-center">
@@ -299,7 +320,7 @@ const CourseDetail = ({ navigation }: any) => {
               </Text>
             ))}
           </View>
-          {user?.enrolls?.includes(courseId) && (
+          {user?.enrolls?.includes(courseId) && user.userType === "student" && (
             <Pressable
               className="rounded-2xl flex-row p-2  flex justify-center items-center border-2 border-orange-600"
               onPress={continueLearning}
@@ -320,19 +341,28 @@ const CourseDetail = ({ navigation }: any) => {
           style={{ fontFamily: "Font" }}
           className=" text-gray-700 my-4 text-pretty text-base"
         >
-          {data?.description}
+          {data?.description} 
         </Text>
-        <Pressable onPress={()=>router.push({ pathname:"/educator-detail",params:data?.educator?._id})} className=" p-2 bg-gray-100 rounded-2xl flex-row gap-2 items-center border-l-8 border-b-8 border-gray-300">
+        <Pressable
+          onPress={() =>
+            router.push({
+              pathname: "/educator-detail",
+              params: {educatorId:data?.educator?._id},
+            })
+          }
+          className=" p-2 bg-gray-100 rounded-2xl flex-row gap-2 items-center border-l-8 border-b-8 border-gray-300"
+        >
           <View>
-          <Image
-  className="w-10 h-10 rounded-full"
-  source={
-    data?.educator?.profile_image 
-      ? { uri: `${BASE_URL}/uploads/profiles/${data.educator.profile_image}` }
-      : require("@/assets/user.png")
-  }
-/>
-
+            <Image
+              className="w-10 h-10 rounded-full"
+              source={
+                data?.educator?.profile_image
+                  ? {
+                      uri: `${BASE_URL}/uploads/profiles/${data.educator.profile_image}`,
+                    }
+                  : require("@/assets/user.png")
+              }
+            />
           </View>
           <View className=" flex-col overflow-hidden">
             <Text style={{ fontFamily: "Font" }} className=" text-xs">
@@ -342,18 +372,23 @@ const CourseDetail = ({ navigation }: any) => {
             <Text style={{ fontFamily: "Font" }}>
               {data?.educator?.fullName}
             </Text>
-            <Text style={{ fontFamily: "Font" }} className=" text-xs h-9 w-72 truncate">
+            <Text
+              style={{ fontFamily: "Font" }}
+              className=" text-xs h-9 w-72 truncate"
+            >
               {data?.educator?.description}
             </Text>
           </View>
         </Pressable>
         {/* Course Price */}
-        <Text
-          style={{ fontFamily: "Font" }}
-          className="text-5xl text-gray-700 mt-8 text-center"
-        >
-          {data?.price ? "₹" + data?.price : "FREE"}
-        </Text>
+        {!user?.enrolls?.includes(courseId) && (
+          <Text
+            style={{ fontFamily: "Font" }}
+            className="text-5xl text-gray-700 mt-8 text-center"
+          >
+            {data?.price ? "₹" + data?.price : "FREE"}
+          </Text>
+        )}
 
         {/* Segmented Control */}
         <SegmentedControl
@@ -381,17 +416,18 @@ const CourseDetail = ({ navigation }: any) => {
           </View>
         )}
       </View>
-      {user?.userType === "educator" && data?.educator === educator?._id && (
+      {user?.userType === "educator" && data?.educator._id === educator?.id && (
         <TouchableOpacity
           onPress={() =>
             router.push({
-              pathname: "/(module)/create-module",
+              pathname: "/create-module",
               params: { courseId: courseId },
             })
           }
-          className=" absolute top-2 right-2 m-2 p-2 h-12 w-12 flex justify-center items-center rounded-xl"
+          className=" flex justify-center items-center rounded-full p-4 bg-orange-500 flex-row gap-4 mb-4"
         >
-          <MaterialIcons name="playlist-add" size={30} color="#1E90FF" />
+          <MaterialIcons name="playlist-add" size={30} color="white" />
+          <Text style={{fontFamily:"Font"}} className=" text-white text-xl">Add a New Module</Text>
         </TouchableOpacity>
       )}
 
@@ -399,25 +435,29 @@ const CourseDetail = ({ navigation }: any) => {
         entering={FadeInDown.duration(300).delay(600).springify()}
         className="w-full flex justify-center items-center mb-8"
       >
-        {user?.enrolls?.includes(courseId) ? (
-          <Pressable
-            className="bg-red-400 fixed bottom p-2 px-4 mb-10 rounded-2xl w-full flex justify-center items-center"
-            onPress={unrollCourse}
-          >
-            <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
-              {loading ? "Wait a minute" : "Unroll from Course"}
-            </Text>
-          </Pressable>
-        ) : (
-          <Pressable
-            className="bg-blue-500 fixed bottom p-2 px-4 mb-10 rounded-2xl w-full flex justify-center items-center"
-            onPress={() => handlePayment(data?.price ? 200 : 200)}
-          >
-            <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
-              {loading ? "Wait a minute" : "Enroll Now"}
-            </Text>
-          </Pressable>
-        )}
+       {user?.userType === "student" && (
+  user?.enrolls?.includes(courseId) ? (
+    <Pressable
+      className="bg-red-400 fixed bottom-0 p-2 px-4 mb-10 rounded-2xl w-full flex justify-center items-center"
+      onPress={unrollCourse}
+    >
+      <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
+        {loading ? "Wait a minute" : "Unroll from Course"}
+      </Text>
+    </Pressable>
+  ) : (
+    <Pressable
+      className="bg-blue-500 fixed bottom-0 p-2 px-4 mb-10 rounded-2xl w-full flex justify-center items-center"
+      onPress={() => handlePayment(data?.price || 200)}
+    >
+      <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
+        {loading ? "Wait a minute" : "Enroll Now"}
+      </Text>
+    </Pressable>
+  )
+)}
+
+       
       </Animated.View>
     </ParallaxScrollView>
   );

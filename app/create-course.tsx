@@ -102,7 +102,9 @@ const CreateCourse = () => {
       const response = await axios.post(`${BASE_URL}/api/courses`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache"
         },
+        
       });
 
       if (response.status === 201) {
@@ -118,10 +120,9 @@ const CreateCourse = () => {
 
   return (
     <View className="flex-1">
-      <View className="">
         
 
-        <ScrollView className="rounded-lg h-[80vh] p-4">
+        <ScrollView className="rounded-lg p-4">
           {/* Title */}
           <Text style={{ fontFamily: "Font" }} className="text-gray-700 mb-2 text-xs">
             Course Title
@@ -199,10 +200,7 @@ const CreateCourse = () => {
             onChangeText={setTopics}
             className="border border-gray-300 rounded-lg p-3 mb-4 text-xl"
           />
-
-          
-        </ScrollView>
-        <TouchableOpacity
+ <TouchableOpacity
             onPress={handleCreateCourse}
             className={`p-4 m-4 rounded-2xl ${
               loading ? "bg-gray-500" : "bg-orange-500"
@@ -217,8 +215,10 @@ const CreateCourse = () => {
               </Text>
             )}
           </TouchableOpacity>
+          
+        </ScrollView>
+       
           <Toast/>
-      </View>
     </View>
   );
 };

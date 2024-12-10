@@ -104,7 +104,9 @@ const CreateCourse = () => {
       const response = await axios.post(`${BASE_URL}/api/courses`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        },
+          "Cache-Control": "no-cache",
+            },
+        
       });
 
       if (response.status === 201) {

@@ -27,6 +27,10 @@ const Login = () => {
         {
           email: formatedemail,
           password,
+        },{
+          headers:{
+            "Cahe-Control": "no-cache",
+          }
         }
       );
   
