@@ -248,7 +248,7 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
-      <Image source={add2} className=" w-[28rem] h-[32rem] mt-8" />
+      <Image source={add2} className=" w-[32rem] h-[32rem] mt-8" />
     </ScrollView>
   );
 }

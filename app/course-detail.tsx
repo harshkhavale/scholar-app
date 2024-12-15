@@ -442,7 +442,7 @@ const CourseDetail = ({ navigation }: any) => {
       onPress={unrollCourse}
     >
       <Text className="text-white text-xl" style={{ fontFamily: "Font" }}>
-        {loading ? "Wait a minute" : "Unroll from Course"}
+        {loading ? "Wait a minute" : "Cancle my Subscription"}
       </Text>
     </Pressable>
   ) : (

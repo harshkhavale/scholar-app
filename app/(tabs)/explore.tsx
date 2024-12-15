@@ -88,7 +88,7 @@ export default function CoursesScreen() {
         <View className="flex-row justify-between items-center">
           {/* Price */}
           <Text className="text-orange-500 text-lg font-bold">
-            ${item.price || "Free"}
+            ₹{item.price || "Free"}
           </Text>
 
           {/* Rating */}

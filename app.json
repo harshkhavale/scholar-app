@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.harshkhavale.client"
     },
     "web": {
       "bundler": "metro",
@@ -35,7 +36,13 @@
       "typedRoutes": true
     },
     "extra": {
-      "apiUrl": "https://scholar-server-3dv6.onrender.com/api"
+      "apiUrl": "https://scholar-server-3dv6.onrender.com/api",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "62654cc5-ff12-4990-abee-453b7ea10ccb"
+      }
     }
   }
 }
